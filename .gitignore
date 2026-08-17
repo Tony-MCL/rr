@@ -1,0 +1,19 @@
+# Godot 4+ generated files
+.godot/
+
+# Imported resources
+.import/
+
+# Exported builds
+builds/
+exports/
+
+# Platform/editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# IDE/editor settings
+.vscode/
+.idea/

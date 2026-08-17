@@ -255,3 +255,11 @@ Status:
 **Reason:** Protect physics, editor, input, and export stability.  
 **Impact:** Exact version is recorded in README at project creation.  
 **Status:** Active
+
+## D-031 – Production Godot version 4.7.1
+
+**Date:** 2026-08-17  
+**Decision:** Ricochet Rush production is locked to Godot `4.7.1-stable` until an upgrade is deliberately evaluated under D-030.  
+**Reason:** Godot 4.7.1 is the current stable maintenance release, while the 4.8 line is still in development. The Phase 0 foundation has also been opened and run successfully with 4.7.1 on the active Windows development machine.  
+**Impact:** Active development machines use Godot 4.7.1. Project behavior is not assumed valid on a newer engine version until the documented upgrade process has been completed.  
+**Status:** Active
