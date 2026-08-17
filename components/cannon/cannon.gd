@@ -26,7 +26,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _rotate_from_drag(horizontal_delta: float) -> void:
 	_angle_degrees = clampf(
-		_angle_degrees + horizontal_delta * drag_sensitivity,
+		_angle_degrees - horizontal_delta * drag_sensitivity,
 		-angle_limit_degrees,
 		angle_limit_degrees
 	)
