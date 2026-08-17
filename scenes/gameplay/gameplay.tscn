@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://components/cannon/cannon.tscn" id="1_cannon"]
+[ext_resource type="PackedScene" path="res://components/balls/bottom_exit/bottom_exit.tscn" id="2_bottom_exit"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
 size = Vector2(40, 1920)
@@ -28,6 +29,9 @@ shape = SubResource("RectangleShape2D_right")
 [node name="TopWall" type="CollisionShape2D" parent="Playfield/Boundaries"]
 position = Vector2(540, 20)
 shape = SubResource("RectangleShape2D_top")
+
+[node name="BottomExit" parent="Playfield" instance=ExtResource("2_bottom_exit")]
+position = Vector2(540, 1980)
 
 [node name="Cannon" parent="Playfield" instance=ExtResource("1_cannon")]
 position = Vector2(540, 80)
