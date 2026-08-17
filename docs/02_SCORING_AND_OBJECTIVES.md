@@ -35,9 +35,10 @@ The implementation must keep these concepts separate:
 7. **Objective-group completion bonus** – an additional reward when the final required object in a group is completed.
 8. **Skill-shot bonuses** – rewards for measurable achievements such as a long shot.
 9. **Multi-target achievements** – rewards for exceptional total performance by one cannonball.
-10. **Bonus-phase scoring** – points produced after the ordinary objective trigger.
-11. **Performance ranking** – the stored evaluation of the completed level.
-12. **Objective evaluation** – the rules that determine whether the level is won.
+10. **Shot score multiplier** – Double Score applied to all eligible score events in the current shot.
+11. **Bonus-phase scoring** – points produced after the ordinary objective trigger.
+12. **Performance ranking** – the stored evaluation of the completed level.
+13. **Objective evaluation** – the rules that determine whether the level is won.
 
 These layers may contribute to the same displayed score, but they must not be implemented as one opaque formula.
 
@@ -397,7 +398,64 @@ Some levels will naturally make particular bonuses easier or more likely through
 
 The architecture must allow additional global skill-shot types later.
 
-## 18. Extra-cannonball rewards
+## 18. Double Score bonus
+
+Double Score is a shot-wide multiplier activated by a bonus peg or block.
+
+### Activation and stacking
+
+When any active cannonball validly hits a Double Score target:
+
+- the activation hit is included in the doubled score;
+- the current shot multiplier doubles;
+- every active cannonball in the shot uses the same multiplier;
+- bonus cannonballs spawned later into the same shot inherit it;
+- each additional Double Score activation doubles the current multiplier again.
+
+| Double Score activations in one shot | Active multiplier |
+|---:|---:|
+| 0 | ×1 |
+| 1 | ×2 |
+| 2 | ×4 |
+| 3 | ×8 |
+| 4 | ×16 |
+
+### Included score events
+
+During ordinary play the multiplier applies to:
+
+- ordinary target hits;
+- multi-hit destruction score;
+- construction-series points;
+- construction milestone bonuses;
+- pure and mixed target-series points;
+- Long Shot;
+- other shot-based skill bonuses.
+
+### Excluded score and reward events
+
+It does not multiply:
+
+- bonus-phase score;
+- level-completion bonus;
+- coffee cups;
+- lives;
+- tokens;
+- ammunition.
+
+### Lifetime
+
+The multiplier:
+
+- belongs to the current shot;
+- resets when every ball belonging to the shot has exited;
+- does not follow a caught ball into a new shot;
+- ends immediately when the bonus trigger is reached;
+- never carries into the bonus phase.
+
+If the activating hit also triggers the bonus phase, that hit receives the current doubled value before ordinary scoring ends.
+
+## 19. Extra-cannonball rewards
 
 Targets and bonus elements may award extra cannonballs.
 
@@ -410,7 +468,7 @@ An extra-cannonball reward:
 
 Multiple active cannonballs may each enter the ball catcher and return one ammunition unit. A successful shot may therefore create a positive net ammunition gain.
 
-## 19. Level objective types
+## 20. Level objective types
 
 The objective system must support at least:
 
@@ -460,7 +518,7 @@ All mandatory objective parts in the initial version use AND logic.
 
 New objective types must be addable without rebuilding the basic level system or editor.
 
-## 20. Bonus trigger and final objective evaluation
+## 21. Bonus trigger and final objective evaluation
 
 The game distinguishes the bonus trigger from the final win evaluation.
 
@@ -495,7 +553,7 @@ After the bonus phase and every completion bonus:
 
 If the score requirement is reached before the gameplay objective, ordinary play continues until the remaining gameplay objective is completed or the attempt fails.
 
-## 21. Bonus-phase scoring
+## 22. Bonus-phase scoring
 
 When the bonus phase begins:
 
@@ -510,7 +568,7 @@ The architecture must support multiple bonus-phase models.
 
 The exact initial bonus-phase presentation and formula remain open.
 
-## 22. Remaining-ammunition bonus
+## 23. Remaining-ammunition bonus
 
 Remaining ammunition should improve the final reward.
 
@@ -518,7 +576,7 @@ Preserving a specific number of cannonballs is not a mandatory level objective.
 
 The exact relationship between remaining ammunition, bonus-phase behavior, and final score remains part of the bonus-phase design.
 
-## 23. Performance ranking
+## 24. Performance ranking
 
 Completed levels store a one-to-three-tier performance ranking.
 
@@ -536,7 +594,7 @@ Higher ranking may award additional rewards or prestige. It does not block the n
 
 The coffee-cup presentation is provisional but compatible with Morning Coffee Labs.
 
-## 24. Score display and feedback
+## 25. Score display and feedback
 
 The score presentation should make important events feel proportionally important.
 
@@ -555,7 +613,7 @@ Major events may use larger presentation, including:
 
 The most exceptional events should be allowed to show a large score message rather than hiding the result in a small counter.
 
-## 25. Configuration principles
+## 26. Configuration principles
 
 The following values should be centrally configurable:
 
@@ -581,7 +639,7 @@ Level-specific configuration should be used only where level design genuinely di
 
 The level designer should not manually enter ordinary point values on every target.
 
-## 26. Current locked values
+## 27. Current locked values
 
 The current locked or accepted working baseline is:
 
@@ -599,9 +657,11 @@ The current locked or accepted working baseline is:
 - First qualifying construction series: ×1
 - Second directly chained qualifying construction series: ×5
 - Third and later directly chained qualifying construction series: ×25
+- Double Score: shot-wide ×2, stacking to ×4, ×8, ×16, and onward for each activation
+- Double Score ends at shot completion or bonus trigger and never applies to bonus-phase score
 - Example Long Shot reward: +1,000, subject to testing
 
-## 27. Open balancing decisions
+## 28. Open balancing decisions
 
 The following remain intentionally open:
 
@@ -618,7 +678,7 @@ The following remain intentionally open:
 
 These are balancing and presentation decisions, not missing structural decisions.
 
-## 28. Design principle
+## 29. Design principle
 
 Scoring should reward ordinary progress, deliberate construction use, objective completion, and exceptional play at different scales.
 
