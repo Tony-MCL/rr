@@ -4,3 +4,11 @@
 
 [node name="Zone" type="Node2D"]
 script = ExtResource("1_zone")
+
+[node name="Targets" type="Node2D" parent="."]
+
+[node name="Solids" type="Node2D" parent="."]
+
+[node name="Constructions" type="Node2D" parent="."]
+
+[node name="ObjectiveObjects" type="Node2D" parent="."]
