@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_5/construction_group_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://components/zones/zone.gd" id="2_zone"]
+[ext_resource type="Script" path="res://components/constructions/construction_group.gd" id="3_construction"]
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="4_target"]
+
+[node name="ConstructionGroupTest" type="Node2D"]
+script = ExtResource("1_test")
+
+[node name="Zone" type="Node2D" parent="."]
+script = ExtResource("2_zone")
+zone_id = 2
+
+[node name="ConstructionAlpha" type="Node2D" parent="Zone"]
+script = ExtResource("3_construction")
+construction_id = &"alpha"
+
+[node name="GroupedA" type="StaticBody2D" parent="Zone/ConstructionAlpha"]
+script = ExtResource("4_target")
+
+[node name="GroupedB" type="StaticBody2D" parent="Zone/ConstructionAlpha"]
+script = ExtResource("4_target")
+
+[node name="NearbyUngrouped" type="StaticBody2D" parent="Zone"]
+script = ExtResource("4_target")
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 620.0
+offset_bottom = 150.0
+theme_override_font_sizes/font_size = 24
+text = "CONSTRUCTION GROUP TEST"
