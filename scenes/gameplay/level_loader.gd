@@ -29,15 +29,13 @@ func load_level(level_id: int) -> Node:
 		push_error("LEVEL LOAD FAILED: INVALID SCENE FOR LEVEL ID %d" % level_id)
 		return null
 
-	return load_level_scene(resource as PackedScene)
+	return load_level_scene(resource as PackedScene, entry)
 
 
-func load_level_scene(level_scene: PackedScene) -> Node:
+func load_level_scene(level_scene: PackedScene, expected_entry: LevelCatalogEntry = null) -> Node:
 	if level_scene == null:
 		push_error("LEVEL LOAD FAILED: NO LEVEL SCENE")
 		return null
-
-	unload_level()
 
 	var active_level := get_node_or_null(active_level_path)
 	if active_level == null:
@@ -45,14 +43,30 @@ func load_level_scene(level_scene: PackedScene) -> Node:
 		return null
 
 	var level := level_scene.instantiate()
-	active_level.add_child(level)
-
 	var configuration := _get_level_configuration(level)
 	if configuration == null:
 		level.queue_free()
 		push_error("LEVEL LOAD FAILED: LEVEL CONFIGURATION NOT FOUND")
 		return null
 
+	var validation_errors := configuration.get_validation_errors()
+	if not validation_errors.is_empty():
+		level.queue_free()
+		push_error(
+			"LEVEL LOAD FAILED: INVALID METADATA: %s"
+			% "; ".join(validation_errors)
+		)
+		return null
+
+	if expected_entry != null:
+		var catalog_error := _get_catalog_consistency_error(configuration, expected_entry)
+		if not catalog_error.is_empty():
+			level.queue_free()
+			push_error("LEVEL LOAD FAILED: %s" % catalog_error)
+			return null
+
+	unload_level()
+	active_level.add_child(level)
 	_active_level = level
 	level_loaded.emit(level, configuration)
 	print("LEVEL LOADED: %d" % configuration.level_id)
@@ -78,3 +92,19 @@ func _get_level_configuration(level: Node) -> LevelConfiguration:
 		return level.get_configuration() as LevelConfiguration
 
 	return null
+
+
+func _get_catalog_consistency_error(
+	configuration: LevelConfiguration,
+	entry: LevelCatalogEntry
+) -> String:
+	if configuration.level_id != entry.level_id:
+		return "LEVEL ID DOES NOT MATCH CATALOG ENTRY"
+	if configuration.level_pack != entry.level_pack:
+		return "LEVEL PACK DOES NOT MATCH CATALOG ENTRY"
+	if configuration.content_version != entry.content_version:
+		return "CONTENT VERSION DOES NOT MATCH CATALOG ENTRY"
+	if configuration.is_published != entry.is_published:
+		return "PUBLISHED STATE DOES NOT MATCH CATALOG ENTRY"
+
+	return ""
