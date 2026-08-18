@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://levels/templates/level_template.gd" id="1_level_template"]
 [ext_resource type="Script" path="res://core/level_configuration.gd" id="2_level_configuration"]
 [ext_resource type="PackedScene" path="res://components/targets/peg/peg.tscn" id="3_peg"]
 [ext_resource type="PackedScene" path="res://components/targets/straight_block/straight_block.tscn" id="4_straight_block"]
+[ext_resource type="PackedScene" path="res://components/targets/curved_block_small/curved_block_small.tscn" id="5_curved_block_small"]
 
 [sub_resource type="Resource" id="Resource_level_configuration"]
 script = ExtResource("2_level_configuration")
@@ -35,6 +36,10 @@ position = Vector2(540, 1000)
 [node name="StraightBlockRotated" parent="Zone1/Targets" instance=ExtResource("4_straight_block")]
 position = Vector2(650, 1120)
 rotation = 0.6108652381980153
+
+[node name="CurvedBlockSmall" parent="Zone1/Targets" instance=ExtResource("5_curved_block_small")]
+position = Vector2(390, 1200)
+rotation = -0.3490658503988659
 
 [node name="Solids" type="Node2D" parent="Zone1"]
 [node name="Constructions" type="Node2D" parent="Zone1"]
