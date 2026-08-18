@@ -41,12 +41,24 @@ func spawn_ordinary_ball(spawn_position: Vector2, direction: Vector2, speed: flo
 
 	_ordinary_ball_loaded = false
 	var shot_id := _claim_next_shot_id()
-	cannonball.set_meta("shot_id", shot_id)
-	scene_root.add_child(cannonball)
-	cannonball.global_position = spawn_position
-	cannonball.linear_velocity = direction.normalized() * speed
-	_register_active_ball(shot_id, cannonball)
+	_configure_and_launch_ball(cannonball, shot_id, spawn_position, direction, speed)
 	print("SHOT %d STARTED" % shot_id)
+	return cannonball
+
+
+func spawn_bonus_ball(spawn_position: Vector2, direction: Vector2, speed: float) -> RigidBody2D:
+	var shot_id := _get_active_shot_id()
+	if shot_id == -1:
+		print("BONUS BALL BLOCKED: NO ACTIVE SHOT")
+		return null
+
+	var cannonball := CANNONBALL_SCENE.instantiate() as RigidBody2D
+	if cannonball == null:
+		push_error("Bonus cannonball scene did not instantiate as RigidBody2D.")
+		return null
+
+	_configure_and_launch_ball(cannonball, shot_id, spawn_position, direction, speed)
+	print("SHOT %d BONUS BALL SPAWNED" % shot_id)
 	return cannonball
 
 
@@ -55,10 +67,8 @@ func register_ball_exit(cannonball: RigidBody2D) -> void:
 
 
 func register_ball_caught(cannonball: RigidBody2D) -> void:
-	if cannonball == null:
-		return
-
-	ammo_controller.add_ammunition(1)
+	if cannonball != null and cannonball.has_meta("shot_id"):
+		ammo_controller.add_ammunition(1)
 	_register_ball_removed(cannonball, "CAUGHT")
 
 
@@ -72,6 +82,33 @@ func _claim_next_shot_id() -> int:
 	return shot_id
 
 
+func _get_active_shot_id() -> int:
+	if _active_balls_by_shot.is_empty():
+		return -1
+
+	return int(_active_balls_by_shot.keys()[0])
+
+
+func _configure_and_launch_ball(
+	cannonball: RigidBody2D,
+	shot_id: int,
+	spawn_position: Vector2,
+	direction: Vector2,
+	speed: float
+) -> void:
+	var scene_root := get_tree().current_scene
+	if scene_root == null:
+		push_error("Cannot spawn cannonball without a current scene.")
+		cannonball.queue_free()
+		return
+
+	cannonball.set_meta("shot_id", shot_id)
+	scene_root.add_child(cannonball)
+	cannonball.global_position = spawn_position
+	cannonball.linear_velocity = direction.normalized() * speed
+	_register_active_ball(shot_id, cannonball)
+
+
 func _register_active_ball(shot_id: int, cannonball: RigidBody2D) -> void:
 	if not _active_balls_by_shot.has(shot_id):
 		_active_balls_by_shot[shot_id] = []
@@ -79,7 +116,7 @@ func _register_active_ball(shot_id: int, cannonball: RigidBody2D) -> void:
 	var active_balls: Array = _active_balls_by_shot[shot_id]
 	active_balls.append(cannonball)
 	_active_balls_by_shot[shot_id] = active_balls
-	print("SHOT %d TRACKING: %d ACTIVE BALL" % [shot_id, active_balls.size()])
+	print("SHOT %d TRACKING: %d ACTIVE BALL(S)" % [shot_id, active_balls.size()])
 
 
 func _register_ball_removed(cannonball: RigidBody2D, removal_reason: String) -> void:
@@ -104,7 +141,7 @@ func _register_ball_removed(cannonball: RigidBody2D, removal_reason: String) -> 
 		_load_next_ball_if_available()
 	else:
 		_active_balls_by_shot[shot_id] = active_balls
-		print("SHOT %d TRACKING: %d ACTIVE BALLS" % [shot_id, active_balls.size()])
+		print("SHOT %d TRACKING: %d ACTIVE BALL(S)" % [shot_id, active_balls.size()])
 
 
 func _load_next_ball_if_available() -> void:
