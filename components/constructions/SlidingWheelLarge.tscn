@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://components/movement/SlideMovement.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://components/constructions/StaticWheelLarge.tscn" id="2"]
+
+[node name="SlidingWheelLarge" instance=ExtResource("1")]
+travel_offset = Vector2(-220, 0)
+speed = 110.0
+start_phase = 0.0
+
+[node name="Wheel" parent="." instance=ExtResource("2")]
