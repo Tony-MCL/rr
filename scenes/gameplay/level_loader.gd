@@ -5,8 +5,31 @@ signal level_loaded(level: Node, configuration: LevelConfiguration)
 signal level_unloaded
 
 @export var active_level_path: NodePath
+@export var level_catalog: LevelCatalog
 
 var _active_level: Node = null
+
+
+func load_level(level_id: int) -> Node:
+	if level_catalog == null:
+		push_error("LEVEL LOAD FAILED: LEVEL CATALOG NOT ASSIGNED")
+		return null
+
+	var entry := level_catalog.get_entry(level_id)
+	if entry == null:
+		push_error("LEVEL LOAD FAILED: LEVEL ID %d NOT FOUND" % level_id)
+		return null
+
+	if entry.scene_path.is_empty():
+		push_error("LEVEL LOAD FAILED: LEVEL ID %d HAS NO SCENE PATH" % level_id)
+		return null
+
+	var resource := load(entry.scene_path)
+	if resource == null or not resource is PackedScene:
+		push_error("LEVEL LOAD FAILED: INVALID SCENE FOR LEVEL ID %d" % level_id)
+		return null
+
+	return load_level_scene(resource as PackedScene)
 
 
 func load_level_scene(level_scene: PackedScene) -> Node:
