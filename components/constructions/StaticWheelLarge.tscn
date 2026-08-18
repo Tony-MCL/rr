@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://components/constructions/construction_group.gd" id="1"]
+[ext_resource type="PackedScene" path="res://components/targets/curved_block_large/curved_block_large.tscn" id="2"]
+
+[node name="StaticWheelLarge" type="Node2D"]
+script = ExtResource("1")
+construction_id = "wheel_large"
+
+[node name="Pivot" type="Marker2D" parent="."]
+
+[node name="Arc0" parent="." instance=ExtResource("2")]
+position = Vector2(0, -105)
+
+[node name="Arc45" parent="." instance=ExtResource("2")]
+position = Vector2(74.246, -74.246)
+rotation = 0.7853981633974483
+
+[node name="Arc90" parent="." instance=ExtResource("2")]
+position = Vector2(105, 0)
+rotation = 1.5707963267948966
+
+[node name="Arc135" parent="." instance=ExtResource("2")]
+position = Vector2(74.246, 74.246)
+rotation = 2.356194490192345
+
+[node name="Arc180" parent="." instance=ExtResource("2")]
+position = Vector2(0, 105)
+rotation = 3.141592653589793
+
+[node name="Arc225" parent="." instance=ExtResource("2")]
+position = Vector2(-74.246, 74.246)
+rotation = 3.9269908169872414
+
+[node name="Arc270" parent="." instance=ExtResource("2")]
+position = Vector2(-105, 0)
+rotation = 4.71238898038469
+
+[node name="Arc315" parent="." instance=ExtResource("2")]
+position = Vector2(-74.246, -74.246)
+rotation = 5.497787143782138
