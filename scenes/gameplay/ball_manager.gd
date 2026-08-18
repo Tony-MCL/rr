@@ -4,6 +4,9 @@ signal shot_completed(shot_id: int)
 
 const CANNONBALL_SCENE: PackedScene = preload("res://components/balls/cannonball/cannonball.tscn")
 
+@export_category("Technical Protection")
+@export_range(1.0, 600.0, 1.0) var ball_failsafe_timeout_seconds: float = 120.0
+
 @onready var ammo_controller: Node = $"../AmmoController"
 
 var _next_shot_id: int = 1
@@ -109,6 +112,7 @@ func _configure_and_launch_ball(
 	cannonball.global_position = spawn_position
 	cannonball.linear_velocity = direction.normalized() * speed
 	_register_active_ball(shot_id, cannonball)
+	_start_ball_failsafe(shot_id, cannonball)
 
 
 func _register_active_ball(shot_id: int, cannonball: RigidBody2D) -> void:
@@ -162,3 +166,24 @@ func _load_next_ball_if_available() -> void:
 	else:
 		_ordinary_ball_loaded = false
 		print("NO AMMUNITION REMAINING")
+
+
+func _start_ball_failsafe(shot_id: int, cannonball: RigidBody2D) -> void:
+	var timer := get_tree().create_timer(ball_failsafe_timeout_seconds)
+	timer.timeout.connect(_on_ball_failsafe_timeout.bind(shot_id, cannonball))
+
+
+func _on_ball_failsafe_timeout(shot_id: int, cannonball: RigidBody2D) -> void:
+	if not is_instance_valid(cannonball):
+		return
+
+	if not _active_balls_by_shot.has(shot_id):
+		return
+
+	var active_balls: Array = _active_balls_by_shot[shot_id]
+	if not active_balls.has(cannonball):
+		return
+
+	push_warning("Shot %d cannonball exceeded %.0f seconds; removing it via technical failsafe." % [shot_id, ball_failsafe_timeout_seconds])
+	_register_ball_removed(cannonball, "FAILSAFE")
+	cannonball.queue_free()
