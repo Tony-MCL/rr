@@ -73,12 +73,22 @@ func load_level_scene(level_scene: PackedScene, expected_entry: LevelCatalogEntr
 	return level
 
 
+func switch_level(level_id: int) -> Node:
+	return load_level(level_id)
+
+
 func unload_level() -> void:
 	if _active_level == null:
 		return
 
-	_active_level.queue_free()
+	var level_to_remove := _active_level
 	_active_level = null
+
+	var parent := level_to_remove.get_parent()
+	if parent != null:
+		parent.remove_child(level_to_remove)
+
+	level_to_remove.queue_free()
 	level_unloaded.emit()
 	print("LEVEL UNLOADED")
 
