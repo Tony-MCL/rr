@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://components/cannon/cannon.tscn" id="1_cannon"]
 [ext_resource type="PackedScene" path="res://components/balls/bottom_exit/bottom_exit.tscn" id="2_bottom_exit"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/gameplay/ammo_controller.gd" id="4_ammo_controller"]
 [ext_resource type="PackedScene" path="res://components/catchers/ball_catcher/ball_catcher.tscn" id="5_ball_catcher"]
 [ext_resource type="Script" path="res://scenes/gameplay/level_loader.gd" id="6_level_loader"]
+[ext_resource type="Resource" path="res://data/level_catalog.tres" id="7_level_catalog"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
 size = Vector2(40, 1920)
@@ -21,6 +22,7 @@ size = Vector2(1080, 40)
 [node name="LevelLoader" type="Node" parent="."]
 script = ExtResource("6_level_loader")
 active_level_path = NodePath("../ActiveLevel")
+level_catalog = ExtResource("7_level_catalog")
 
 [node name="BallManager" type="Node" parent="."]
 script = ExtResource("3_ball_manager")
