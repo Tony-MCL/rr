@@ -1,13 +1,10 @@
-[gd_scene load_steps=2 format=3]
-
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_curved_block_small"]
-points = PackedVector2Array(-50, -15, -38.27, -34.13, -19.13, -45.87, 0, -50, 19.13, -45.87, 38.27, -34.13, 50, -15, 50, 15, 38.27, -4.13, 19.13, 7.61, 0, 11.74, -19.13, 7.61, -38.27, -4.13, -50, 15)
+[gd_scene format=3]
 
 [node name="CurvedBlockSmall" type="StaticBody2D"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("ConvexPolygonShape2D_curved_block_small")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-25.36, -9.38, -15.53, -12.96, -5.23, -14.77, 5.23, -14.77, 15.53, -12.96, 25.36, -9.38, 12.68, 17.81, 7.76, 16.02, 2.61, 15.11, -2.61, 15.11, -7.76, 16.02, -12.68, 17.81)
 
 [node name="Visual" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-50, -15, -38.27, -34.13, -19.13, -45.87, 0, -50, 19.13, -45.87, 38.27, -34.13, 50, -15, 50, 15, 38.27, -4.13, 19.13, 7.61, 0, 11.74, -19.13, 7.61, -38.27, -4.13, -50, 15)
+polygon = PackedVector2Array(-25.36, -9.38, -15.53, -12.96, -5.23, -14.77, 5.23, -14.77, 15.53, -12.96, 25.36, -9.38, 12.68, 17.81, 7.76, 16.02, 2.61, 15.11, -2.61, 15.11, -7.76, 16.02, -12.68, 17.81)
 color = Color(0.35, 0.85, 0.45, 1)
