@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://components/catchers/ball_catcher/ball_catcher.gd" id="1_ball_catcher"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_catcher"]
+size = Vector2(240, 44)
+
+[node name="BallCatcher" type="Area2D"]
+script = ExtResource("1_ball_catcher")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_catcher")
+
+[node name="Visual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-120, -22, 120, -22, 120, 22, -120, 22)

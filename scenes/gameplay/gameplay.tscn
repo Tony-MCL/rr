@@ -1,7 +1,10 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="PackedScene" path="res://components/cannon/cannon.tscn" id="1_cannon"]
 [ext_resource type="PackedScene" path="res://components/balls/bottom_exit/bottom_exit.tscn" id="2_bottom_exit"]
+[ext_resource type="Script" path="res://scenes/gameplay/ball_manager.gd" id="3_ball_manager"]
+[ext_resource type="Script" path="res://scenes/gameplay/ammo_controller.gd" id="4_ammo_controller"]
+[ext_resource type="PackedScene" path="res://components/catchers/ball_catcher/ball_catcher.tscn" id="5_ball_catcher"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
 size = Vector2(40, 1920)
@@ -13,6 +16,13 @@ size = Vector2(40, 1920)
 size = Vector2(1080, 40)
 
 [node name="Gameplay" type="Node2D"]
+
+[node name="BallManager" type="Node" parent="."]
+script = ExtResource("3_ball_manager")
+
+[node name="AmmoController" type="Node" parent="."]
+script = ExtResource("4_ammo_controller")
+starting_ammunition = 5
 
 [node name="Playfield" type="Node2D" parent="."]
 
@@ -30,8 +40,15 @@ shape = SubResource("RectangleShape2D_right")
 position = Vector2(540, 20)
 shape = SubResource("RectangleShape2D_top")
 
+[node name="BallCatcher" parent="Playfield" instance=ExtResource("5_ball_catcher")]
+position = Vector2(540, 1840)
+
 [node name="BottomExit" parent="Playfield" instance=ExtResource("2_bottom_exit")]
 position = Vector2(540, 1980)
 
 [node name="Cannon" parent="Playfield" instance=ExtResource("1_cannon")]
 position = Vector2(540, 80)
+
+[connection signal="fire_requested" from="Playfield/Cannon" to="BallManager" method="spawn_ordinary_ball"]
+[connection signal="ball_caught" from="Playfield/BallCatcher" to="BallManager" method="register_ball_caught"]
+[connection signal="ball_exited" from="Playfield/BottomExit" to="BallManager" method="register_ball_exit"]
