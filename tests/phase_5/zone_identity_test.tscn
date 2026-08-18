@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_5/zone_identity_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://components/zones/Zone.tscn" id="2_zone"]
+[ext_resource type="PackedScene" path="res://components/targets/peg/peg.tscn" id="3_peg"]
+
+[node name="ZoneIdentityTest" type="Node2D"]
+script = ExtResource("1_test")
+
+[node name="Zone1" parent="." instance=ExtResource("2_zone")]
+zone_id = 1
+
+[node name="Peg" parent="Zone1/Targets" instance=ExtResource("3_peg")]
+position = Vector2(180, 300)
+
+[node name="Zone3" parent="." instance=ExtResource("2_zone")]
+zone_id = 3
+
+[node name="NestedGroup" type="Node2D" parent="Zone3"]
+
+[node name="Peg" parent="Zone3/NestedGroup" instance=ExtResource("3_peg")]
+position = Vector2(420, 300)
+
+[node name="ResultLabel" type="Label" parent="."]
+position = Vector2(110, 120)
+theme_override_font_sizes/font_size = 28
+text = "ZONE IDENTITY TEST"
