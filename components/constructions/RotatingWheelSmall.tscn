@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://components/movement/RotationMovement.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://components/constructions/StaticWheelSmall.tscn" id="2"]
 
-[node name="RotatingWheelSmall" parent="." instance=ExtResource("1")]
+[node name="RotatingWheelSmall" instance=ExtResource("1")]
 degrees_per_second = 60.0
 start_phase = 0.0
 
