@@ -10,48 +10,48 @@ construction_id = "wheel_large"
 [node name="Pivot" type="Marker2D" parent="."]
 
 [node name="Arc0" parent="." instance=ExtResource("2")]
-position = Vector2(0, -105)
+position = Vector2(0, -96.5926)
 
 [node name="Arc30" parent="." instance=ExtResource("2")]
-position = Vector2(52.5, -90.933)
+position = Vector2(48.2963, -83.6516)
 rotation = 0.5235987755982988
 
 [node name="Arc60" parent="." instance=ExtResource("2")]
-position = Vector2(90.933, -52.5)
+position = Vector2(83.6516, -48.2963)
 rotation = 1.0471975511965976
 
 [node name="Arc90" parent="." instance=ExtResource("2")]
-position = Vector2(105, 0)
+position = Vector2(96.5926, 0)
 rotation = 1.5707963267948966
 
 [node name="Arc120" parent="." instance=ExtResource("2")]
-position = Vector2(90.933, 52.5)
+position = Vector2(83.6516, 48.2963)
 rotation = 2.0943951023931953
 
 [node name="Arc150" parent="." instance=ExtResource("2")]
-position = Vector2(52.5, 90.933)
+position = Vector2(48.2963, 83.6516)
 rotation = 2.6179938779914944
 
 [node name="Arc180" parent="." instance=ExtResource("2")]
-position = Vector2(0, 105)
+position = Vector2(0, 96.5926)
 rotation = 3.141592653589793
 
 [node name="Arc210" parent="." instance=ExtResource("2")]
-position = Vector2(-52.5, 90.933)
+position = Vector2(-48.2963, 83.6516)
 rotation = 3.6651914291880923
 
 [node name="Arc240" parent="." instance=ExtResource("2")]
-position = Vector2(-90.933, 52.5)
+position = Vector2(-83.6516, 48.2963)
 rotation = 4.1887902047863905
 
 [node name="Arc270" parent="." instance=ExtResource("2")]
-position = Vector2(-105, 0)
+position = Vector2(-96.5926, 0)
 rotation = 4.71238898038469
 
 [node name="Arc300" parent="." instance=ExtResource("2")]
-position = Vector2(-90.933, -52.5)
+position = Vector2(-83.6516, -48.2963)
 rotation = 5.235987755982989
 
 [node name="Arc330" parent="." instance=ExtResource("2")]
-position = Vector2(-52.5, -90.933)
+position = Vector2(-48.2963, -83.6516)
 rotation = 5.759586531581287
