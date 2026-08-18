@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="1_target_body"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_peg"]
+radius = 22.5
+
+[node name="Peg" type="StaticBody2D"]
+script = ExtResource("1_target_body")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_peg")
+
+[node name="Visual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(22.5, 0, 20.79, 8.61, 15.91, 15.91, 8.61, 20.79, 0, 22.5, -8.61, 20.79, -15.91, 15.91, -20.79, 8.61, -22.5, 0, -20.79, -8.61, -15.91, -15.91, -8.61, -20.79, 0, -22.5, 8.61, -20.79, 15.91, -15.91, 20.79, -8.61)
+color = Color(0.25, 0.65, 1, 1)

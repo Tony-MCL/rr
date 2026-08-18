@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://levels/templates/level_template.gd" id="1_level_template"]
 [ext_resource type="Script" path="res://core/level_configuration.gd" id="2_level_configuration"]
+[ext_resource type="PackedScene" path="res://components/targets/peg/peg.tscn" id="3_peg"]
+[ext_resource type="PackedScene" path="res://components/targets/straight_block/straight_block.tscn" id="4_straight_block"]
+[ext_resource type="PackedScene" path="res://components/targets/curved_block_small/curved_block_small.tscn" id="5_curved_block_small"]
+[ext_resource type="PackedScene" path="res://components/targets/curved_block_large/curved_block_large.tscn" id="6_curved_block_large"]
 
 [sub_resource type="Resource" id="Resource_level_configuration"]
 script = ExtResource("2_level_configuration")
@@ -9,7 +13,7 @@ level_id = 1
 level_pack = 1
 content_version = 1
 is_published = false
-starting_ammunition = 4
+starting_ammunition = 10
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_level_template")
@@ -18,6 +22,25 @@ configuration = SubResource("Resource_level_configuration")
 [node name="Zone1" type="Node2D" parent="."]
 [node name="Targets" type="Node2D" parent="Zone1"]
 [node name="Solids" type="Node2D" parent="Zone1"]
+
+[node name="SolidPeg" parent="Zone1/Solids" instance=ExtResource("3_peg")]
+position = Vector2(360, 560)
+physical_role = 1
+
+[node name="SolidStraightBlock" parent="Zone1/Solids" instance=ExtResource("4_straight_block")]
+position = Vector2(720, 560)
+rotation = 0.35
+physical_role = 1
+
+[node name="SolidCurvedBlockSmall" parent="Zone1/Solids" instance=ExtResource("5_curved_block_small")]
+position = Vector2(360, 900)
+physical_role = 1
+
+[node name="SolidCurvedBlockLarge" parent="Zone1/Solids" instance=ExtResource("6_curved_block_large")]
+position = Vector2(720, 900)
+rotation = -0.25
+physical_role = 1
+
 [node name="Constructions" type="Node2D" parent="Zone1"]
 [node name="ObjectiveObjects" type="Node2D" parent="Zone1"]
 
@@ -41,7 +64,3 @@ configuration = SubResource("Resource_level_configuration")
 
 [node name="BallCatcher" type="Node2D" parent="."]
 [node name="LevelPresentation" type="Node2D" parent="."]
-
-[node name="TestMarker" type="Polygon2D" parent="LevelPresentation"]
-position = Vector2(390, 900)
-polygon = PackedVector2Array(-90, -90, 90, -90, 90, 90, -90, 90)

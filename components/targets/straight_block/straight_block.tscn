@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="1_target_body"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_straight_block"]
+size = Vector2(50, 30)
+
+[node name="StraightBlock" type="StaticBody2D"]
+script = ExtResource("1_target_body")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_straight_block")
+
+[node name="Visual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-25, -15, 25, -15, 25, 15, -25, 15)
+color = Color(1, 0.55, 0.2, 1)
+
+[node name="SnapLeft" type="Marker2D" parent="."]
+position = Vector2(-25, 0)
+rotation = 3.141592653589793
+
+[node name="SnapRight" type="Marker2D" parent="."]
+position = Vector2(25, 0)
