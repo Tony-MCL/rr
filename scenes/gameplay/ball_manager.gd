@@ -7,6 +7,10 @@ var _active_balls_by_shot: Dictionary = {}
 
 
 func spawn_ordinary_ball(spawn_position: Vector2, direction: Vector2, speed: float) -> RigidBody2D:
+	if has_active_shot():
+		print("ORDINARY FIRE BLOCKED: ACTIVE SHOT")
+		return null
+
 	var shot_id := _claim_next_shot_id()
 	var cannonball := CANNONBALL_SCENE.instantiate() as RigidBody2D
 	if cannonball == null:
@@ -50,6 +54,10 @@ func register_ball_exit(cannonball: RigidBody2D) -> void:
 	else:
 		_active_balls_by_shot[shot_id] = active_balls
 		print("SHOT %d TRACKING: %d ACTIVE BALLS" % [shot_id, active_balls.size()])
+
+
+func has_active_shot() -> bool:
+	return not _active_balls_by_shot.is_empty()
 
 
 func _claim_next_shot_id() -> int:
