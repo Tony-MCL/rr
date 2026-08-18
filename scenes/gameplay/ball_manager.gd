@@ -1,5 +1,7 @@
 extends Node
 
+signal shot_completed(shot_id: int)
+
 const CANNONBALL_SCENE: PackedScene = preload("res://components/balls/cannonball/cannonball.tscn")
 
 @onready var ammo_controller: Node = $"../AmmoController"
@@ -138,10 +140,16 @@ func _register_ball_removed(cannonball: RigidBody2D, removal_reason: String) -> 
 	if active_balls.is_empty():
 		_active_balls_by_shot.erase(shot_id)
 		print("SHOT %d TRACKING: 0 ACTIVE BALLS (%s)" % [shot_id, removal_reason])
-		_load_next_ball_if_available()
+		_complete_shot(shot_id)
 	else:
 		_active_balls_by_shot[shot_id] = active_balls
 		print("SHOT %d TRACKING: %d ACTIVE BALL(S)" % [shot_id, active_balls.size()])
+
+
+func _complete_shot(shot_id: int) -> void:
+	print("SHOT %d COMPLETED" % shot_id)
+	shot_completed.emit(shot_id)
+	_load_next_ball_if_available()
 
 
 func _load_next_ball_if_available() -> void:
