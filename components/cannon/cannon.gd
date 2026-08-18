@@ -1,6 +1,6 @@
 extends Node2D
 
-const CANNONBALL_SCENE: PackedScene = preload("res://components/balls/cannonball/cannonball.tscn")
+signal fire_requested(spawn_position: Vector2, direction: Vector2, speed: float)
 
 @export_category("Aiming")
 @export_range(1.0, 89.0, 1.0) var angle_limit_degrees: float = 85.0
@@ -79,17 +79,8 @@ func _apply_angle() -> void:
 
 
 func _fire() -> void:
-	var cannonball := CANNONBALL_SCENE.instantiate() as RigidBody2D
-	if cannonball == null:
-		push_error("Cannonball scene did not instantiate as RigidBody2D.")
-		return
-
-	var scene_root := get_tree().current_scene
-	if scene_root == null:
-		push_error("Cannot fire cannonball without a current scene.")
-		cannonball.queue_free()
-		return
-
-	scene_root.add_child(cannonball)
-	cannonball.global_position = muzzle.global_position
-	cannonball.linear_velocity = barrel.global_transform.y.normalized() * shoot_speed
+	fire_requested.emit(
+		muzzle.global_position,
+		barrel.global_transform.y.normalized(),
+		shoot_speed
+	)
