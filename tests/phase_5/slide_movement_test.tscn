@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_5/slide_movement_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://components/movement/slide_movement.gd" id="2_slide"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_block"]
+size = Vector2(50, 30)
+
+[node name="SlideMovementTest" type="Node2D"]
+script = ExtResource("1_test")
+
+[node name="StatusLabel" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 120.0
+text = "SLIDE MOVEMENT TEST: RUNNING"
+
+[node name="Guide" type="Line2D" parent="."]
+points = PackedVector2Array(180, 330, 500, 330)
+width = 2.0
+default_color = Color(0.75, 0.75, 0.75, 0.5)
+
+[node name="StartMarker" type="Polygon2D" parent="."]
+position = Vector2(180, 330)
+polygon = PackedVector2Array(-4, -12, 4, -12, 4, 12, -4, 12)
+color = Color(1, 1, 1, 0.8)
+
+[node name="EndMarker" type="Polygon2D" parent="."]
+position = Vector2(500, 330)
+polygon = PackedVector2Array(-4, -12, 4, -12, 4, 12, -4, 12)
+color = Color(1, 1, 1, 0.8)
+
+[node name="SlideMovement" type="Node2D" parent="."]
+position = Vector2(180, 330)
+script = ExtResource("2_slide")
+travel_offset = Vector2(320, 0)
+speed = 160.0
+
+[node name="Block" type="StaticBody2D" parent="SlideMovement"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SlideMovement/Block"]
+shape = SubResource("RectangleShape2D_block")
+
+[node name="Visual" type="Polygon2D" parent="SlideMovement/Block"]
+polygon = PackedVector2Array(-25, -15, 25, -15, 25, 15, -25, 15)
+color = Color(1, 0.55, 0.2, 1)
