@@ -2,7 +2,13 @@ extends Node
 
 signal ammunition_changed(current_ammunition: int)
 
+@export_range(0, 999, 1) var starting_ammunition: int = 5
+
 var _current_ammunition: int = 0
+
+
+func _ready() -> void:
+	set_ammunition(starting_ammunition)
 
 
 func get_ammunition() -> int:
