@@ -51,28 +51,11 @@ func spawn_ordinary_ball(spawn_position: Vector2, direction: Vector2, speed: flo
 
 
 func register_ball_exit(cannonball: RigidBody2D) -> void:
-	if cannonball == null:
-		return
+	_register_ball_removed(cannonball, "EXITED")
 
-	if not cannonball.has_meta("shot_id"):
-		push_warning("Exited cannonball had no shot_id metadata.")
-		return
 
-	var shot_id := int(cannonball.get_meta("shot_id"))
-	if not _active_balls_by_shot.has(shot_id):
-		push_warning("Exited cannonball belonged to untracked shot %d." % shot_id)
-		return
-
-	var active_balls: Array = _active_balls_by_shot[shot_id]
-	active_balls.erase(cannonball)
-
-	if active_balls.is_empty():
-		_active_balls_by_shot.erase(shot_id)
-		print("SHOT %d TRACKING: 0 ACTIVE BALLS" % shot_id)
-		_load_next_ball_if_available()
-	else:
-		_active_balls_by_shot[shot_id] = active_balls
-		print("SHOT %d TRACKING: %d ACTIVE BALLS" % [shot_id, active_balls.size()])
+func register_ball_caught(cannonball: RigidBody2D) -> void:
+	_register_ball_removed(cannonball, "CAUGHT")
 
 
 func has_active_shot() -> bool:
@@ -93,6 +76,31 @@ func _register_active_ball(shot_id: int, cannonball: RigidBody2D) -> void:
 	active_balls.append(cannonball)
 	_active_balls_by_shot[shot_id] = active_balls
 	print("SHOT %d TRACKING: %d ACTIVE BALL" % [shot_id, active_balls.size()])
+
+
+func _register_ball_removed(cannonball: RigidBody2D, removal_reason: String) -> void:
+	if cannonball == null:
+		return
+
+	if not cannonball.has_meta("shot_id"):
+		push_warning("%s cannonball had no shot_id metadata." % removal_reason.capitalize())
+		return
+
+	var shot_id := int(cannonball.get_meta("shot_id"))
+	if not _active_balls_by_shot.has(shot_id):
+		push_warning("%s cannonball belonged to untracked shot %d." % [removal_reason.capitalize(), shot_id])
+		return
+
+	var active_balls: Array = _active_balls_by_shot[shot_id]
+	active_balls.erase(cannonball)
+
+	if active_balls.is_empty():
+		_active_balls_by_shot.erase(shot_id)
+		print("SHOT %d TRACKING: 0 ACTIVE BALLS (%s)" % [shot_id, removal_reason])
+		_load_next_ball_if_available()
+	else:
+		_active_balls_by_shot[shot_id] = active_balls
+		print("SHOT %d TRACKING: %d ACTIVE BALLS" % [shot_id, active_balls.size()])
 
 
 func _load_next_ball_if_available() -> void:
