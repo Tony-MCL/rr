@@ -11,8 +11,8 @@ func _ready() -> void:
 
 
 func _run_test() -> void:
-	var small_count: bool = _count_target_children(small_wheel) == 4
-	var large_count: bool = _count_target_children(large_wheel) == 8
+	var small_count: bool = _count_target_children(small_wheel) == 6
+	var large_count: bool = _count_target_children(large_wheel) == 12
 	var small_identity: bool = _all_targets_match_construction(small_wheel, "wheel_small")
 	var large_identity: bool = _all_targets_match_construction(large_wheel, "wheel_large")
 	var small_pivot: bool = small_wheel.get_node_or_null("Pivot") != null
@@ -21,8 +21,8 @@ func _run_test() -> void:
 
 	status_label.text = "STATIC WHEELS TEST: %s\nSmall wheel pieces: %s\nLarge wheel pieces: %s\nSmall identity: %s\nLarge identity: %s\nShared pivots: %s" % [
 		"PASS" if passed else "FAIL",
-		"4" if small_count else "FAIL",
-		"8" if large_count else "FAIL",
+		"6" if small_count else "FAIL",
+		"12" if large_count else "FAIL",
 		"YES" if small_identity else "NO",
 		"YES" if large_identity else "NO",
 		"YES" if small_pivot and large_pivot else "NO",
