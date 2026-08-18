@@ -85,4 +85,4 @@ These remain owned by later phases according to `06_BUILD_PLAN.md`.
 
 ## Verification result
 
-Phase 2 is verified complete on desktop and Android. The shot lifecycle, ammunition flow, catcher behavior, multi-ball shot ownership, and technical stuck-ball protection are stable enough to serve as the foundation for Phase 3 target gameplay.
+Phase 2 is verified complete on desktop and Android. The shot lifecycle, ammunition flow, catcher behavior, multi-ball shot ownership, and technical stuck-ball protection are stable enough to serve as the foundation for Phase 3 level framework work.
