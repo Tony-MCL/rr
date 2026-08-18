@@ -1,8 +1,8 @@
 extends Node
 
 @export var spawn_position: Vector2 = Vector2(540, 960)
-@export var spawn_direction: Vector2 = Vector2(0.65, 1.0)
-@export_range(100.0, 3000.0, 10.0) var spawn_speed: float = 1100.0
+@export var spawn_direction: Vector2 = Vector2(0.0, 1.0)
+@export_range(100.0, 3000.0, 10.0) var spawn_speed: float = 900.0
 
 @onready var ball_manager: Node = $"../BallManager"
 
