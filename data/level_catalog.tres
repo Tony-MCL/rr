@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="LevelCatalog" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://core/level_catalog.gd" id="1_level_catalog"]
+[ext_resource type="Script" path="res://core/level_catalog_entry.gd" id="2_level_catalog_entry"]
+
+[sub_resource type="Resource" id="Resource_level_001"]
+script = ExtResource("2_level_catalog_entry")
+level_id = 1
+level_pack = 1
+content_version = 1
+is_published = false
+scene_path = "res://levels/drafts/test_level_001.tscn"
+progression_order = 1
+
+[sub_resource type="Resource" id="Resource_level_002"]
+script = ExtResource("2_level_catalog_entry")
+level_id = 2
+level_pack = 1
+content_version = 1
+is_published = false
+scene_path = "res://levels/drafts/test_level_002.tscn"
+progression_order = 2
+
+[resource]
+script = ExtResource("1_level_catalog")
+entries = Array[ExtResource("2_level_catalog_entry")]([SubResource("Resource_level_001"), SubResource("Resource_level_002")])

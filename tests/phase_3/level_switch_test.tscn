@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_3/level_switch_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/level_loader.gd" id="2_level_loader"]
+[ext_resource type="Resource" path="res://data/level_catalog.tres" id="3_level_catalog"]
+
+[node name="LevelSwitchTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="LevelLoader" type="Node" parent="."]
+script = ExtResource("2_level_loader")
+active_level_path = NodePath("../ActiveLevel")
+level_catalog = ExtResource("3_level_catalog")
+
+[node name="ActiveLevel" type="Node2D" parent="."]

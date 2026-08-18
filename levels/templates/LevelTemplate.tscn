@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://levels/templates/level_template.gd" id="1_level_template"]
+[ext_resource type="Script" path="res://core/level_configuration.gd" id="2_level_configuration"]
+
+[sub_resource type="Resource" id="Resource_level_configuration"]
+script = ExtResource("2_level_configuration")
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_level_template")
+configuration = SubResource("Resource_level_configuration")
+
+[node name="Zone1" type="Node2D" parent="."]
+
+[node name="Targets" type="Node2D" parent="Zone1"]
+
+[node name="Solids" type="Node2D" parent="Zone1"]
+
+[node name="Constructions" type="Node2D" parent="Zone1"]
+
+[node name="ObjectiveObjects" type="Node2D" parent="Zone1"]
+
+[node name="Zone2" type="Node2D" parent="."]
+
+[node name="Targets" type="Node2D" parent="Zone2"]
+
+[node name="Solids" type="Node2D" parent="Zone2"]
+
+[node name="Constructions" type="Node2D" parent="Zone2"]
+
+[node name="ObjectiveObjects" type="Node2D" parent="Zone2"]
+
+[node name="Zone3" type="Node2D" parent="."]
+
+[node name="Targets" type="Node2D" parent="Zone3"]
+
+[node name="Solids" type="Node2D" parent="Zone3"]
+
+[node name="Constructions" type="Node2D" parent="Zone3"]
+
+[node name="ObjectiveObjects" type="Node2D" parent="Zone3"]
+
+[node name="Zone4" type="Node2D" parent="."]
+
+[node name="Targets" type="Node2D" parent="Zone4"]
+
+[node name="Solids" type="Node2D" parent="Zone4"]
+
+[node name="Constructions" type="Node2D" parent="Zone4"]
+
+[node name="ObjectiveObjects" type="Node2D" parent="Zone4"]
+
+[node name="BallCatcher" type="Node2D" parent="."]
+
+[node name="LevelPresentation" type="Node2D" parent="."]
