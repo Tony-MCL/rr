@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_5/static_movement_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://components/movement/StaticMovement.tscn" id="2_static"]
+[ext_resource type="PackedScene" path="res://components/targets/straight_block/straight_block.tscn" id="3_block"]
+
+[node name="StaticMovementTest" type="Node2D"]
+script = ExtResource("1_test")
+
+[node name="StatusLabel" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 430.0
+offset_bottom = 130.0
+text = "STATIC MOVEMENT TEST: WAITING"
+
+[node name="StaticMovement" parent="." instance=ExtResource("2_static")]
+position = Vector2(240, 440)
+rotation = 0.2617993877991494
+
+[node name="StraightBlock" parent="StaticMovement" instance=ExtResource("3_block")]
