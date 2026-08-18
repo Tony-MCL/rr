@@ -22,29 +22,28 @@ configuration = SubResource("Resource_level_configuration")
 [node name="Zone1" type="Node2D" parent="."]
 [node name="Targets" type="Node2D" parent="Zone1"]
 
-[node name="PegCenter" parent="Zone1/Targets" instance=ExtResource("3_peg")]
-position = Vector2(540, 600)
+[node name="CurvedBlockLarge" parent="Zone1/Targets" instance=ExtResource("6_curved_block_large")]
+position = Vector2(540, 520)
 
 [node name="PegLeft" parent="Zone1/Targets" instance=ExtResource("3_peg")]
-position = Vector2(390, 800)
+position = Vector2(300, 760)
 
 [node name="PegRight" parent="Zone1/Targets" instance=ExtResource("3_peg")]
-position = Vector2(690, 800)
+position = Vector2(780, 760)
 
 [node name="StraightBlockHorizontal" parent="Zone1/Targets" instance=ExtResource("4_straight_block")]
-position = Vector2(540, 1000)
+position = Vector2(300, 980)
 
 [node name="StraightBlockRotated" parent="Zone1/Targets" instance=ExtResource("4_straight_block")]
-position = Vector2(650, 1120)
+position = Vector2(780, 980)
 rotation = 0.6108652381980153
 
 [node name="CurvedBlockSmall" parent="Zone1/Targets" instance=ExtResource("5_curved_block_small")]
-position = Vector2(390, 1200)
+position = Vector2(300, 1200)
 rotation = -0.3490658503988659
 
-[node name="CurvedBlockLarge" parent="Zone1/Targets" instance=ExtResource("6_curved_block_large")]
-position = Vector2(540, 1320)
-rotation = 0.2617993877991494
+[node name="PegCenter" parent="Zone1/Targets" instance=ExtResource("3_peg")]
+position = Vector2(780, 1200)
 
 [node name="Solids" type="Node2D" parent="Zone1"]
 [node name="Constructions" type="Node2D" parent="Zone1"]
