@@ -12,30 +12,46 @@ construction_id = "wheel_large"
 [node name="Arc0" parent="." instance=ExtResource("2")]
 position = Vector2(0, -105)
 
-[node name="Arc45" parent="." instance=ExtResource("2")]
-position = Vector2(74.246, -74.246)
-rotation = 0.7853981633974483
+[node name="Arc30" parent="." instance=ExtResource("2")]
+position = Vector2(52.5, -90.933)
+rotation = 0.5235987755982988
+
+[node name="Arc60" parent="." instance=ExtResource("2")]
+position = Vector2(90.933, -52.5)
+rotation = 1.0471975511965976
 
 [node name="Arc90" parent="." instance=ExtResource("2")]
 position = Vector2(105, 0)
 rotation = 1.5707963267948966
 
-[node name="Arc135" parent="." instance=ExtResource("2")]
-position = Vector2(74.246, 74.246)
-rotation = 2.356194490192345
+[node name="Arc120" parent="." instance=ExtResource("2")]
+position = Vector2(90.933, 52.5)
+rotation = 2.0943951023931953
+
+[node name="Arc150" parent="." instance=ExtResource("2")]
+position = Vector2(52.5, 90.933)
+rotation = 2.6179938779914944
 
 [node name="Arc180" parent="." instance=ExtResource("2")]
 position = Vector2(0, 105)
 rotation = 3.141592653589793
 
-[node name="Arc225" parent="." instance=ExtResource("2")]
-position = Vector2(-74.246, 74.246)
-rotation = 3.9269908169872414
+[node name="Arc210" parent="." instance=ExtResource("2")]
+position = Vector2(-52.5, 90.933)
+rotation = 3.6651914291880923
+
+[node name="Arc240" parent="." instance=ExtResource("2")]
+position = Vector2(-90.933, 52.5)
+rotation = 4.1887902047863905
 
 [node name="Arc270" parent="." instance=ExtResource("2")]
 position = Vector2(-105, 0)
 rotation = 4.71238898038469
 
-[node name="Arc315" parent="." instance=ExtResource("2")]
-position = Vector2(-74.246, -74.246)
-rotation = 5.497787143782138
+[node name="Arc300" parent="." instance=ExtResource("2")]
+position = Vector2(-90.933, -52.5)
+rotation = 5.235987755982989
+
+[node name="Arc330" parent="." instance=ExtResource("2")]
+position = Vector2(-52.5, -90.933)
+rotation = 5.759586531581287
