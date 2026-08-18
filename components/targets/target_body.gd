@@ -46,6 +46,22 @@ func get_target_state() -> TargetState:
 	return _state
 
 
+func get_zone() -> Zone:
+	var ancestor := get_parent()
+	while ancestor != null:
+		if ancestor is Zone:
+			return ancestor as Zone
+		ancestor = ancestor.get_parent()
+	return null
+
+
+func get_zone_id() -> int:
+	var zone := get_zone()
+	if zone == null:
+		return 0
+	return zone.get_zone_id()
+
+
 func is_hit_requirement_reached() -> bool:
 	return is_target() and _valid_hits >= hits_required
 
