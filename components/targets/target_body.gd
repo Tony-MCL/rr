@@ -62,6 +62,22 @@ func get_zone_id() -> int:
 	return zone.get_zone_id()
 
 
+func get_construction_group() -> ConstructionGroup:
+	var ancestor := get_parent()
+	while ancestor != null:
+		if ancestor is ConstructionGroup:
+			return ancestor as ConstructionGroup
+		ancestor = ancestor.get_parent()
+	return null
+
+
+func get_construction_id() -> StringName:
+	var construction := get_construction_group()
+	if construction == null:
+		return &""
+	return construction.get_construction_id()
+
+
 func is_hit_requirement_reached() -> bool:
 	return is_target() and _valid_hits >= hits_required
 
