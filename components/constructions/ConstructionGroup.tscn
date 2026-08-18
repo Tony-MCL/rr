@@ -4,3 +4,5 @@
 
 [node name="ConstructionGroup" type="Node2D"]
 script = ExtResource("1_construction")
+
+[node name="Pivot" type="Marker2D" parent="."]
