@@ -27,12 +27,12 @@ text = "LARGE 30° JOIN"
 position = Vector2(120, 360)
 
 [node name="SmallB" parent="." instance=ExtResource("2")]
-position = Vector2(157.5, 338.349365)
+position = Vector2(157.5, 381.650635)
 rotation = 1.0471975511965976
 
 [node name="LargeA" parent="." instance=ExtResource("3")]
 position = Vector2(350, 360)
 
 [node name="LargeB" parent="." instance=ExtResource("3")]
-position = Vector2(396.650635, 347.5)
+position = Vector2(396.650635, 372.5)
 rotation = 0.5235987755982988
