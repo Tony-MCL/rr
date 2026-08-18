@@ -1,6 +1,9 @@
-[gd_scene format=3]
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="1_target_body"]
 
 [node name="CurvedBlockSmall" type="StaticBody2D"]
+script = ExtResource("1_target_body")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-25.36, -9.38, -15.53, -12.96, -5.23, -14.77, 5.23, -14.77, 15.53, -12.96, 25.36, -9.38, 12.68, 17.81, 7.76, 16.02, 2.61, 15.11, -2.61, 15.11, -7.76, 16.02, -12.68, 17.81)
