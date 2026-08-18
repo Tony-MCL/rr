@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_5/rotation_movement_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://components/movement/RotationMovement.tscn" id="2_rotation"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_marker"]
+size = Vector2(30, 16)
+
+[node name="RotationMovementTest" type="Node2D"]
+script = ExtResource("1_test")
+
+[node name="StatusLabel" type="Label" parent="."]
+position = Vector2(24, 20)
+text = "ROTATION MOVEMENT TEST: RUNNING"
+
+[node name="RotationMovement" parent="." instance=ExtResource("2_rotation")]
+position = Vector2(180, 220)
+degrees_per_second = 90.0
+start_phase = 0.25
+
+[node name="Marker" type="StaticBody2D" parent="RotationMovement"]
+position = Vector2(70, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RotationMovement/Marker"]
+shape = SubResource("RectangleShape_marker")
+
+[node name="Visual" type="Polygon2D" parent="RotationMovement/Marker"]
+polygon = PackedVector2Array(-15, -8, 15, -8, 15, 8, -15, 8)
+color = Color(1, 0.55, 0.2, 1)
+
+[node name="PivotMarker" type="Polygon2D" parent="RotationMovement"]
+polygon = PackedVector2Array(0, -4, 4, 0, 0, 4, -4, 0)
+color = Color(1, 1, 1, 1)
