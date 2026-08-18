@@ -55,6 +55,10 @@ func register_ball_exit(cannonball: RigidBody2D) -> void:
 
 
 func register_ball_caught(cannonball: RigidBody2D) -> void:
+	if cannonball == null:
+		return
+
+	ammo_controller.add_ammunition(1)
 	_register_ball_removed(cannonball, "CAUGHT")
 
 
