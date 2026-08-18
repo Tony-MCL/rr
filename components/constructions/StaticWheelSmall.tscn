@@ -10,24 +10,24 @@ construction_id = "wheel_small"
 [node name="Pivot" type="Marker2D" parent="."]
 
 [node name="Arc0" parent="." instance=ExtResource("2")]
-position = Vector2(0, -60)
+position = Vector2(0, -50)
 
 [node name="Arc60" parent="." instance=ExtResource("2")]
-position = Vector2(51.962, -30)
+position = Vector2(43.3013, -25)
 rotation = 1.0471975511965976
 
 [node name="Arc120" parent="." instance=ExtResource("2")]
-position = Vector2(51.962, 30)
+position = Vector2(43.3013, 25)
 rotation = 2.0943951023931953
 
 [node name="Arc180" parent="." instance=ExtResource("2")]
-position = Vector2(0, 60)
+position = Vector2(0, 50)
 rotation = 3.141592653589793
 
 [node name="Arc240" parent="." instance=ExtResource("2")]
-position = Vector2(-51.962, 30)
+position = Vector2(-43.3013, 25)
 rotation = 4.1887902047863905
 
 [node name="Arc300" parent="." instance=ExtResource("2")]
-position = Vector2(-51.962, -30)
+position = Vector2(-43.3013, -25)
 rotation = 5.235987755982989
