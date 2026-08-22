@@ -20,6 +20,7 @@ enum TargetShape {
 enum BonusRole {
 	NONE,
 	EXTRA_BALL,
+	DOUBLE_SCORE,
 }
 
 enum TargetState {
@@ -129,9 +130,9 @@ func register_hit(cannonball: RigidBody2D) -> bool:
 		return false
 
 	_valid_hits += 1
+	_activate_bonus_once(cannonball)
 	target_hit.emit(self, _valid_hits, hits_required)
 	valid_target_hit.emit(self, cannonball, _valid_hits, hits_required)
-	_activate_bonus_once(cannonball)
 	print("TARGET HIT: %s %d/%d" % [name, _valid_hits, hits_required])
 
 	if _valid_hits >= hits_required:
