@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/chained_construction_multipliers_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+[ext_resource type="Script" path="res://components/constructions/construction_group.gd" id="3_construction"]
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="4_target"]
+
+[node name="ChainedConstructionMultipliersTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="ConstructionA" type="Node2D" parent="."]
+script = ExtResource("3_construction")
+construction_id = &"construction_a"
+
+[node name="Target" type="StaticBody2D" parent="ConstructionA"]
+script = ExtResource("4_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="ConstructionB" type="Node2D" parent="."]
+script = ExtResource("3_construction")
+construction_id = &"construction_b"
+
+[node name="Target" type="StaticBody2D" parent="ConstructionB"]
+script = ExtResource("4_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="ConstructionC" type="Node2D" parent="."]
+script = ExtResource("3_construction")
+construction_id = &"construction_c"
+
+[node name="Target" type="StaticBody2D" parent="ConstructionC"]
+script = ExtResource("4_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="ConstructionD" type="Node2D" parent="."]
+script = ExtResource("3_construction")
+construction_id = &"construction_d"
+
+[node name="Target" type="StaticBody2D" parent="ConstructionD"]
+script = ExtResource("4_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 900.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 28
+text = "Running chained construction multiplier test..."
