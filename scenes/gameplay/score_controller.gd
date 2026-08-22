@@ -32,11 +32,19 @@ func register_target_hit(target: TargetBody, current_hits: int, required_hits: i
 	if target == null:
 		return
 
-	if required_hits != 1 or current_hits != 1:
+	var zone_value := get_zone_value(target.get_zone_id())
+	if zone_value <= 0:
 		return
 
-	var zone_value := get_zone_value(target.get_zone_id())
-	add_score(zone_value)
+	if required_hits == 1 and current_hits == 1:
+		add_score(zone_value)
+		return
+
+	if required_hits == 3 and current_hits >= 1 and current_hits <= 3:
+		if current_hits == 3:
+			add_score(zone_value * 10)
+		else:
+			add_score(zone_value)
 
 
 func reset_score() -> void:
