@@ -11,6 +11,11 @@ enum PhysicalRole {
 	SOLID,
 }
 
+enum TargetShape {
+	BLOCK,
+	PEG,
+}
+
 enum TargetState {
 	ACTIVE,
 	DAMAGED,
@@ -20,6 +25,9 @@ enum TargetState {
 
 @export_category("Physical Role")
 @export var physical_role: PhysicalRole = PhysicalRole.TARGET
+
+@export_category("Target Identity")
+@export var target_shape: TargetShape = TargetShape.BLOCK
 
 @export_category("Hit Configuration")
 @export_enum("One Hit:1", "Three Hits:3") var hits_required: int = 1
@@ -37,6 +45,18 @@ func is_target() -> bool:
 
 func is_solid() -> bool:
 	return physical_role == PhysicalRole.SOLID
+
+
+func is_peg() -> bool:
+	return target_shape == TargetShape.PEG
+
+
+func is_block() -> bool:
+	return target_shape == TargetShape.BLOCK
+
+
+func get_target_shape() -> TargetShape:
+	return target_shape
 
 
 func get_valid_hits() -> int:
