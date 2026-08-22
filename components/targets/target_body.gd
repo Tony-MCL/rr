@@ -2,6 +2,7 @@ extends StaticBody2D
 class_name TargetBody
 
 signal target_hit(target: TargetBody, current_hits: int, required_hits: int)
+signal valid_target_hit(target: TargetBody, cannonball: RigidBody2D, current_hits: int, required_hits: int)
 signal hit_requirement_reached(target: TargetBody)
 signal state_changed(target: TargetBody, previous_state: TargetState, new_state: TargetState)
 
@@ -82,7 +83,7 @@ func is_hit_requirement_reached() -> bool:
 	return is_target() and _valid_hits >= hits_required
 
 
-func register_hit(_cannonball: RigidBody2D) -> bool:
+func register_hit(cannonball: RigidBody2D) -> bool:
 	if not is_target():
 		return false
 
@@ -91,6 +92,7 @@ func register_hit(_cannonball: RigidBody2D) -> bool:
 
 	_valid_hits += 1
 	target_hit.emit(self, _valid_hits, hits_required)
+	valid_target_hit.emit(self, cannonball, _valid_hits, hits_required)
 	print("TARGET HIT: %s %d/%d" % [name, _valid_hits, hits_required])
 
 	if _valid_hits >= hits_required:
