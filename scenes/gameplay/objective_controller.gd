@@ -16,12 +16,14 @@ var _objectives: Dictionary = {}
 var _bonus_trigger_emitted: bool = false
 var _last_final_evaluation: bool = false
 var _score_controller: Node = null
+var _counted_destroyed_targets: Dictionary = {}
 
 
 func clear_objectives() -> void:
 	_objectives.clear()
 	_bonus_trigger_emitted = false
 	_last_final_evaluation = false
+	_counted_destroyed_targets.clear()
 
 
 func bind_score_controller(score_controller: Node) -> void:
@@ -45,6 +47,21 @@ func add_score_objective(
 	add_objective(objective_id, ObjectiveKind.SCORE, required_score, mandatory, true)
 	if _score_controller != null:
 		set_objective_progress(objective_id, int(_score_controller.get_score()))
+
+
+func add_target_count_objective(
+	objective_id: StringName,
+	required_targets: int,
+	mandatory: bool = true
+) -> void:
+	add_objective(objective_id, ObjectiveKind.TARGET_COUNT, required_targets, mandatory, false)
+
+
+func register_target_for_objectives(target: TargetBody) -> void:
+	if target == null or target.is_solid():
+		return
+	if not target.hit_requirement_reached.is_connected(_on_target_destroyed):
+		target.hit_requirement_reached.connect(_on_target_destroyed)
 
 
 func add_objective(
@@ -169,6 +186,22 @@ func _on_score_changed(current_score: int) -> void:
 		if int(state.get("kind", -1)) != ObjectiveKind.SCORE:
 			continue
 		set_objective_progress(objective_id, current_score)
+
+
+func _on_target_destroyed(target: TargetBody) -> void:
+	if target == null or target.is_solid():
+		return
+
+	var target_key := target.get_instance_id()
+	if _counted_destroyed_targets.has(target_key):
+		return
+	_counted_destroyed_targets[target_key] = true
+
+	for objective_id in _objectives:
+		var state: Dictionary = _objectives[objective_id]
+		if int(state.get("kind", -1)) != ObjectiveKind.TARGET_COUNT:
+			continue
+		increment_objective(objective_id, 1)
 
 
 func _evaluate_bonus_trigger() -> void:
