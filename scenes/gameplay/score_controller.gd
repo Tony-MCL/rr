@@ -30,8 +30,14 @@ const CONSTRUCTION_CHAIN_MULTIPLIERS := {
 const CONSTRUCTION_CHAIN_MAX_MULTIPLIER: int = 25
 const CONSTRUCTION_QUALIFYING_LENGTH: int = 6
 
+const GENERAL_SERIES_NONE: StringName = &"none"
+const GENERAL_SERIES_PURE_PEG: StringName = &"pure_peg"
+const GENERAL_SERIES_PURE_BLOCK: StringName = &"pure_block"
+const GENERAL_SERIES_MIXED: StringName = &"mixed"
+
 var _current_score: int = 0
 var _construction_series_by_ball: Dictionary = {}
+var _general_series_by_ball: Dictionary = {}
 
 
 func get_score() -> int:
@@ -136,6 +142,55 @@ func register_construction_hit(cannonball: RigidBody2D, target: TargetBody) -> i
 	return series_points * awarded_multiplier
 
 
+func register_general_target_hit(cannonball: RigidBody2D, target: TargetBody) -> void:
+	if cannonball == null or target == null or not target.is_target():
+		return
+
+	var ball_key := cannonball.get_instance_id()
+	var state: Dictionary = _general_series_by_ball.get(ball_key, {})
+	var series_length: int = int(state.get("series_length", 0)) + 1
+	var has_peg: bool = bool(state.get("has_peg", false)) or target.is_peg()
+	var has_block: bool = bool(state.get("has_block", false)) or target.is_block()
+
+	_general_series_by_ball[ball_key] = {
+		"series_length": series_length,
+		"has_peg": has_peg,
+		"has_block": has_block,
+	}
+
+
+func get_general_series_length(cannonball: RigidBody2D) -> int:
+	if cannonball == null:
+		return 0
+	var state: Dictionary = _general_series_by_ball.get(cannonball.get_instance_id(), {})
+	return int(state.get("series_length", 0))
+
+
+func get_general_series_type(cannonball: RigidBody2D) -> StringName:
+	if cannonball == null:
+		return GENERAL_SERIES_NONE
+
+	var state: Dictionary = _general_series_by_ball.get(cannonball.get_instance_id(), {})
+	if state.is_empty():
+		return GENERAL_SERIES_NONE
+
+	var has_peg: bool = bool(state.get("has_peg", false))
+	var has_block: bool = bool(state.get("has_block", false))
+	if has_peg and has_block:
+		return GENERAL_SERIES_MIXED
+	if has_peg:
+		return GENERAL_SERIES_PURE_PEG
+	if has_block:
+		return GENERAL_SERIES_PURE_BLOCK
+	return GENERAL_SERIES_NONE
+
+
+func break_general_series(cannonball: RigidBody2D) -> void:
+	if cannonball == null:
+		return
+	_general_series_by_ball.erase(cannonball.get_instance_id())
+
+
 func get_construction_series_value(series_length: int) -> int:
 	if series_length <= 0:
 		return 0
@@ -183,4 +238,5 @@ func break_construction_series(cannonball: RigidBody2D) -> void:
 func reset_score() -> void:
 	_current_score = 0
 	_construction_series_by_ball.clear()
+	_general_series_by_ball.clear()
 	score_changed.emit(_current_score)
