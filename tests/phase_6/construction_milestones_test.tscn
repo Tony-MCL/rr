@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/construction_milestones_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+[ext_resource type="Script" path="res://components/constructions/construction_group.gd" id="3_construction"]
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="4_target"]
+
+[node name="ConstructionMilestonesTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="Construction" type="Node2D" parent="."]
+script = ExtResource("3_construction")
+construction_id = &"milestone_test"
+
+[node name="Target" type="StaticBody2D" parent="Construction"]
+script = ExtResource("4_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="Cannonball" type="RigidBody2D" parent="."]
+freeze = true
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 760.0
+offset_bottom = 260.0
+theme_override_font_sizes/font_size = 28
+text = "Running construction milestones test..."

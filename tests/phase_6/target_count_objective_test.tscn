@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/target_count_objective_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/objective_controller.gd" id="2_objective"]
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="3_target"]
+
+[node name="TargetCountObjectiveTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ObjectiveController" type="Node" parent="."]
+script = ExtResource("2_objective")
+
+[node name="OneHitTarget" type="StaticBody2D" parent="."]
+script = ExtResource("3_target")
+hits_required = 1
+removal_delay_seconds = 5.0
+
+[node name="ThreeHitTarget" type="StaticBody2D" parent="."]
+script = ExtResource("3_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="SolidTarget" type="StaticBody2D" parent="."]
+script = ExtResource("3_target")
+physical_role = 1
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 900.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 28
+text = "Running target-count objective test..."

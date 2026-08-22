@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/double_score_stacking_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+
+[node name="DoubleScoreStackingTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 760.0
+offset_bottom = 240.0
+theme_override_font_sizes/font_size = 28
+text = "Running Double Score stacking test..."

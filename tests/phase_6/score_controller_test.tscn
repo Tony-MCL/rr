@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/score_controller_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score_controller"]
+
+[node name="ScoreControllerTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score_controller")
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 120.0
+offset_top = 180.0
+offset_right = 960.0
+offset_bottom = 420.0
+theme_override_font_sizes/font_size = 32
+text = "Running ScoreController test..."
+horizontal_alignment = 1
+vertical_alignment = 1

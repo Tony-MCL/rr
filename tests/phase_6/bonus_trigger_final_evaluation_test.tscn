@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/bonus_trigger_final_evaluation_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+[ext_resource type="Script" path="res://scenes/gameplay/objective_controller.gd" id="3_objective"]
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="4_target"]
+
+[node name="BonusTriggerFinalEvaluationTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="ObjectiveController" type="Node" parent="."]
+script = ExtResource("3_objective")
+
+[node name="ObjectiveTarget" type="StaticBody2D" parent="."]
+script = ExtResource("4_target")
+target_role = 1
+hits_required = 1
+removal_delay_seconds = 5.0
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 920.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 28
+text = "Running bonus trigger / final evaluation test..."

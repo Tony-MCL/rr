@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/construction_series_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+[ext_resource type="Script" path="res://components/constructions/construction_group.gd" id="3_construction"]
+
+[node name="ConstructionSeriesTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="ConstructionA" type="Node2D" parent="."]
+script = ExtResource("3_construction")
+construction_id = &"construction_a"
+
+[node name="ConstructionB" type="Node2D" parent="."]
+script = ExtResource("3_construction")
+construction_id = &"construction_b"
+
+[node name="BallA" type="RigidBody2D" parent="."]
+freeze = true
+
+[node name="BallB" type="RigidBody2D" parent="."]
+freeze = true
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 900.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 28
+text = "Running construction-series test..."

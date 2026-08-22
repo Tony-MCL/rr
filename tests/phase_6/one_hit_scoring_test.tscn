@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/one_hit_scoring_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+[ext_resource type="Script" path="res://components/zones/zone.gd" id="3_zone"]
+[ext_resource type="PackedScene" path="res://components/targets/peg/peg.tscn" id="4_peg"]
+
+[node name="OneHitScoringTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="Zone1" type="Node2D" parent="."]
+script = ExtResource("3_zone")
+zone_id = 1
+
+[node name="Zone1Target" parent="Zone1" instance=ExtResource("4_peg")]
+removal_delay_seconds = 1.0
+
+[node name="Zone4" type="Node2D" parent="."]
+script = ExtResource("3_zone")
+zone_id = 4
+
+[node name="Zone4Target" parent="Zone4" instance=ExtResource("4_peg")]
+removal_delay_seconds = 1.0
+
+[node name="Zone2" type="Node2D" parent="."]
+script = ExtResource("3_zone")
+zone_id = 2
+
+[node name="SolidTarget" parent="Zone2" instance=ExtResource("4_peg")]
+physical_role = 1
+
+[node name="UnzonedTarget" parent="." instance=ExtResource("4_peg")]
+removal_delay_seconds = 1.0
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 700.0
+offset_bottom = 260.0
+theme_override_font_sizes/font_size = 28
+text = "Running one-hit scoring test..."

@@ -7,6 +7,7 @@ radius = 22.5
 
 [node name="Peg" type="StaticBody2D"]
 script = ExtResource("1_target_body")
+target_shape = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_peg")

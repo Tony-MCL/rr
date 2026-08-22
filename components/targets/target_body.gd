@@ -2,12 +2,30 @@ extends StaticBody2D
 class_name TargetBody
 
 signal target_hit(target: TargetBody, current_hits: int, required_hits: int)
+signal valid_target_hit(target: TargetBody, cannonball: RigidBody2D, current_hits: int, required_hits: int)
+signal bonus_activated(target: TargetBody, cannonball: RigidBody2D, bonus_role: BonusRole)
 signal hit_requirement_reached(target: TargetBody)
 signal state_changed(target: TargetBody, previous_state: TargetState, new_state: TargetState)
 
 enum PhysicalRole {
 	TARGET,
 	SOLID,
+}
+
+enum TargetShape {
+	BLOCK,
+	PEG,
+}
+
+enum TargetRole {
+	NORMAL,
+	OBJECTIVE,
+}
+
+enum BonusRole {
+	NONE,
+	EXTRA_BALL,
+	DOUBLE_SCORE,
 }
 
 enum TargetState {
@@ -20,6 +38,13 @@ enum TargetState {
 @export_category("Physical Role")
 @export var physical_role: PhysicalRole = PhysicalRole.TARGET
 
+@export_category("Target Identity")
+@export var target_shape: TargetShape = TargetShape.BLOCK
+@export var target_role: TargetRole = TargetRole.NORMAL
+
+@export_category("Bonus Role")
+@export var bonus_role: BonusRole = BonusRole.NONE
+
 @export_category("Hit Configuration")
 @export_enum("One Hit:1", "Three Hits:3") var hits_required: int = 1
 
@@ -28,6 +53,7 @@ enum TargetState {
 
 var _valid_hits: int = 0
 var _state: TargetState = TargetState.ACTIVE
+var _bonus_activated: bool = false
 
 
 func is_target() -> bool:
@@ -36,6 +62,34 @@ func is_target() -> bool:
 
 func is_solid() -> bool:
 	return physical_role == PhysicalRole.SOLID
+
+
+func is_peg() -> bool:
+	return target_shape == TargetShape.PEG
+
+
+func is_block() -> bool:
+	return target_shape == TargetShape.BLOCK
+
+
+func is_objective_target() -> bool:
+	return is_target() and target_role == TargetRole.OBJECTIVE
+
+
+func get_target_shape() -> TargetShape:
+	return target_shape
+
+
+func get_target_role() -> TargetRole:
+	return target_role
+
+
+func get_bonus_role() -> BonusRole:
+	return bonus_role
+
+
+func has_bonus_activated() -> bool:
+	return _bonus_activated
 
 
 func get_valid_hits() -> int:
@@ -82,7 +136,7 @@ func is_hit_requirement_reached() -> bool:
 	return is_target() and _valid_hits >= hits_required
 
 
-func register_hit(_cannonball: RigidBody2D) -> bool:
+func register_hit(cannonball: RigidBody2D) -> bool:
 	if not is_target():
 		return false
 
@@ -90,7 +144,9 @@ func register_hit(_cannonball: RigidBody2D) -> bool:
 		return false
 
 	_valid_hits += 1
+	_activate_bonus_once(cannonball)
 	target_hit.emit(self, _valid_hits, hits_required)
+	valid_target_hit.emit(self, cannonball, _valid_hits, hits_required)
 	print("TARGET HIT: %s %d/%d" % [name, _valid_hits, hits_required])
 
 	if _valid_hits >= hits_required:
@@ -101,6 +157,15 @@ func register_hit(_cannonball: RigidBody2D) -> bool:
 		_set_state(TargetState.DAMAGED)
 
 	return true
+
+
+func _activate_bonus_once(cannonball: RigidBody2D) -> void:
+	if _bonus_activated or bonus_role == BonusRole.NONE:
+		return
+
+	_bonus_activated = true
+	bonus_activated.emit(self, cannonball, bonus_role)
+	print("TARGET BONUS ACTIVATED: %s %s" % [name, BonusRole.keys()[bonus_role]])
 
 
 func _enter_destroyed_delay() -> void:

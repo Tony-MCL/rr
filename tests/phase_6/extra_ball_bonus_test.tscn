@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/extra_ball_bonus_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/ammo_controller.gd" id="2_ammo"]
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="3_target"]
+
+[node name="ExtraBallBonusTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="AmmoController" type="Node" parent="."]
+script = ExtResource("2_ammo")
+starting_ammunition = 5
+
+[node name="ExtraBallTarget" type="StaticBody2D" parent="."]
+script = ExtResource("3_target")
+bonus_role = 1
+removal_delay_seconds = 5.0
+
+[node name="ThreeHitExtraBallTarget" type="StaticBody2D" parent="."]
+script = ExtResource("3_target")
+bonus_role = 1
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="NormalTarget" type="StaticBody2D" parent="."]
+script = ExtResource("3_target")
+removal_delay_seconds = 5.0
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 900.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 28
+text = "Running Extra Ball bonus test..."
