@@ -128,11 +128,10 @@ func activate_double_score(cannonball: RigidBody2D) -> void:
 	if shot_id < 0:
 		return
 
-	if int(_shot_multiplier_by_id.get(shot_id, 1)) >= 2:
-		return
-
-	_shot_multiplier_by_id[shot_id] = 2
-	shot_multiplier_changed.emit(shot_id, 2)
+	var current_multiplier := int(_shot_multiplier_by_id.get(shot_id, 1))
+	var new_multiplier := current_multiplier * 2
+	_shot_multiplier_by_id[shot_id] = new_multiplier
+	shot_multiplier_changed.emit(shot_id, new_multiplier)
 
 
 func get_shot_multiplier(cannonball: RigidBody2D) -> int:
