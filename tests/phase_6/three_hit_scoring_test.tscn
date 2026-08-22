@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/three_hit_scoring_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+[ext_resource type="Script" path="res://components/targets/target_body.gd" id="3_target"]
+
+[node name="ThreeHitScoringTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="Zone1" type="Zone" parent="."]
+zone_id = 1
+
+[node name="Zone1Target" type="StaticBody2D" parent="Zone1"]
+script = ExtResource("3_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="Zone3" type="Zone" parent="."]
+zone_id = 3
+
+[node name="Zone3Target" type="StaticBody2D" parent="Zone3"]
+script = ExtResource("3_target")
+hits_required = 3
+removal_delay_seconds = 5.0
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 760.0
+offset_bottom = 260.0
+theme_override_font_sizes/font_size = 28
+text = "Running three-hit scoring test..."
