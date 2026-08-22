@@ -67,3 +67,4 @@ position = Vector2(540, 80)
 [connection signal="fire_requested" from="Playfield/Cannon" to="BallManager" method="spawn_ordinary_ball"]
 [connection signal="ball_caught" from="Playfield/BallCatcher" to="BallManager" method="register_ball_caught"]
 [connection signal="ball_exited" from="Playfield/BottomExit" to="BallManager" method="register_ball_exit"]
+[connection signal="shot_completed" from="BallManager" to="ScoreController" method="end_double_score_for_shot"]
