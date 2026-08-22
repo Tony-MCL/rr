@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="PackedScene" path="res://components/cannon/cannon.tscn" id="1_cannon"]
 [ext_resource type="PackedScene" path="res://components/balls/bottom_exit/bottom_exit.tscn" id="2_bottom_exit"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scenes/gameplay/level_loader.gd" id="6_level_loader"]
 [ext_resource type="Resource" path="res://data/level_catalog.tres" id="7_level_catalog"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="8_gameplay"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="9_score_controller"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
 size = Vector2(40, 1920)
@@ -32,6 +33,9 @@ script = ExtResource("3_ball_manager")
 [node name="AmmoController" type="Node" parent="."]
 script = ExtResource("4_ammo_controller")
 starting_ammunition = 5
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("9_score_controller")
 
 [node name="Playfield" type="Node2D" parent="."]
 
