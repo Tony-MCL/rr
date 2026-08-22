@@ -6,10 +6,13 @@ extends Node2D
 
 @onready var level_loader: LevelLoader = $LevelLoader
 @onready var ammo_controller: Node = $AmmoController
+@onready var score_controller: Node = $ScoreController
+@onready var objective_controller: ObjectiveController = $ObjectiveController
 
 
 func _ready() -> void:
 	level_loader.level_loaded.connect(_on_level_loaded)
+	objective_controller.bind_score_controller(score_controller)
 
 	if load_starting_level_on_ready:
 		level_loader.load_level(starting_level_id)
