@@ -1,6 +1,7 @@
 extends Node
 
 signal score_changed(current_score: int)
+signal skill_shot_awarded(cannonball: RigidBody2D, skill_shot_id: StringName, points: int)
 
 const ZONE_VALUES := {
 	1: 10,
@@ -35,9 +36,14 @@ const GENERAL_SERIES_PURE_PEG: StringName = &"pure_peg"
 const GENERAL_SERIES_PURE_BLOCK: StringName = &"pure_block"
 const GENERAL_SERIES_MIXED: StringName = &"mixed"
 
+const SKILL_SHOT_LONG_SHOT: StringName = &"long_shot"
+const LONG_SHOT_POINTS: int = 1000
+const LONG_SHOT_MIN_DISTANCE: float = 600.0
+
 var _current_score: int = 0
 var _construction_series_by_ball: Dictionary = {}
 var _general_series_by_ball: Dictionary = {}
+var _skill_shot_by_ball: Dictionary = {}
 
 
 func get_score() -> int:
@@ -159,6 +165,28 @@ func register_general_target_hit(cannonball: RigidBody2D, target: TargetBody) ->
 	}
 
 
+func register_skill_shot_target_hit(cannonball: RigidBody2D, target: TargetBody) -> int:
+	if cannonball == null or target == null or not target.is_target():
+		return 0
+
+	var ball_key := cannonball.get_instance_id()
+	var state: Dictionary = _skill_shot_by_ball.get(ball_key, {})
+	var current_position := target.global_position
+	var awarded_points := 0
+
+	if state.has("last_target_position"):
+		var last_position: Vector2 = state["last_target_position"]
+		if last_position.distance_to(current_position) >= LONG_SHOT_MIN_DISTANCE:
+			awarded_points = LONG_SHOT_POINTS
+			add_score(awarded_points)
+			skill_shot_awarded.emit(cannonball, SKILL_SHOT_LONG_SHOT, awarded_points)
+
+	_skill_shot_by_ball[ball_key] = {
+		"last_target_position": current_position,
+	}
+	return awarded_points
+
+
 func get_general_series_length(cannonball: RigidBody2D) -> int:
 	if cannonball == null:
 		return 0
@@ -189,6 +217,12 @@ func break_general_series(cannonball: RigidBody2D) -> void:
 	if cannonball == null:
 		return
 	_general_series_by_ball.erase(cannonball.get_instance_id())
+
+
+func reset_skill_shot_tracking(cannonball: RigidBody2D) -> void:
+	if cannonball == null:
+		return
+	_skill_shot_by_ball.erase(cannonball.get_instance_id())
 
 
 func get_construction_series_value(series_length: int) -> int:
@@ -239,4 +273,5 @@ func reset_score() -> void:
 	_current_score = 0
 	_construction_series_by_ball.clear()
 	_general_series_by_ball.clear()
+	_skill_shot_by_ball.clear()
 	score_changed.emit(_current_score)
