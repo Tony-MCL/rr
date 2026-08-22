@@ -42,3 +42,14 @@ func add_ammunition(amount: int = 1) -> void:
 	_current_ammunition += amount
 	ammunition_changed.emit(_current_ammunition)
 	print("AMMUNITION: %d" % _current_ammunition)
+
+
+func register_target_bonus(
+	_target: TargetBody,
+	_cannonball: RigidBody2D,
+	bonus_role: TargetBody.BonusRole
+) -> void:
+	if bonus_role != TargetBody.BonusRole.EXTRA_BALL:
+		return
+
+	add_ammunition(1)
