@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/objective_controller_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/objective_controller.gd" id="2_objective"]
+
+[node name="ObjectiveControllerTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ObjectiveController" type="Node" parent="."]
+script = ExtResource("2_objective")
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 900.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 28
+text = "Running ObjectiveController test..."
