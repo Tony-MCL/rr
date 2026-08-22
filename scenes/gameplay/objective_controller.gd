@@ -1,0 +1,154 @@
+extends Node
+class_name ObjectiveController
+
+signal objective_progress_changed(objective_id: StringName, current_value: int, required_value: int)
+signal bonus_trigger_ready()
+signal final_evaluation_changed(all_mandatory_complete: bool)
+
+enum ObjectiveKind {
+	SCORE,
+	TARGET_COUNT,
+	DESIGNATED_TARGETS,
+	CLEAR_ALL,
+}
+
+var _objectives: Dictionary = {}
+var _bonus_trigger_emitted: bool = false
+var _last_final_evaluation: bool = false
+
+
+func clear_objectives() -> void:
+	_objectives.clear()
+	_bonus_trigger_emitted = false
+	_last_final_evaluation = false
+
+
+func add_objective(
+	objective_id: StringName,
+	kind: ObjectiveKind,
+	required_value: int,
+	mandatory: bool = true,
+	is_score_objective: bool = false
+) -> void:
+	if objective_id == &"" or required_value <= 0:
+		return
+
+	_objectives[objective_id] = {
+		"kind": kind,
+		"required_value": required_value,
+		"current_value": 0,
+		"mandatory": mandatory,
+		"is_score_objective": is_score_objective,
+	}
+	_emit_final_evaluation_if_changed()
+
+
+func set_objective_progress(objective_id: StringName, current_value: int) -> void:
+	if not _objectives.has(objective_id):
+		return
+
+	var state: Dictionary = _objectives[objective_id]
+	var required_value: int = int(state.get("required_value", 0))
+	var clamped_value := clampi(current_value, 0, required_value)
+	if int(state.get("current_value", 0)) == clamped_value:
+		return
+
+	state["current_value"] = clamped_value
+	_objectives[objective_id] = state
+	objective_progress_changed.emit(objective_id, clamped_value, required_value)
+	_evaluate_bonus_trigger()
+	_emit_final_evaluation_if_changed()
+
+
+func increment_objective(objective_id: StringName, amount: int = 1) -> void:
+	if amount <= 0 or not _objectives.has(objective_id):
+		return
+	var current_value := get_objective_current_value(objective_id)
+	set_objective_progress(objective_id, current_value + amount)
+
+
+func get_objective_current_value(objective_id: StringName) -> int:
+	if not _objectives.has(objective_id):
+		return 0
+	var state: Dictionary = _objectives[objective_id]
+	return int(state.get("current_value", 0))
+
+
+func get_objective_required_value(objective_id: StringName) -> int:
+	if not _objectives.has(objective_id):
+		return 0
+	var state: Dictionary = _objectives[objective_id]
+	return int(state.get("required_value", 0))
+
+
+func is_objective_complete(objective_id: StringName) -> bool:
+	if not _objectives.has(objective_id):
+		return false
+	return get_objective_current_value(objective_id) >= get_objective_required_value(objective_id)
+
+
+func are_all_mandatory_objectives_complete() -> bool:
+	var has_mandatory := false
+	for objective_id in _objectives:
+		var state: Dictionary = _objectives[objective_id]
+		if not bool(state.get("mandatory", true)):
+			continue
+		has_mandatory = true
+		if not is_objective_complete(objective_id):
+			return false
+	return has_mandatory
+
+
+func are_all_mandatory_non_score_objectives_complete() -> bool:
+	var has_non_score_mandatory := false
+	for objective_id in _objectives:
+		var state: Dictionary = _objectives[objective_id]
+		if not bool(state.get("mandatory", true)) or bool(state.get("is_score_objective", false)):
+			continue
+		has_non_score_mandatory = true
+		if not is_objective_complete(objective_id):
+			return false
+	return has_non_score_mandatory
+
+
+func has_mandatory_non_score_objective() -> bool:
+	for objective_id in _objectives:
+		var state: Dictionary = _objectives[objective_id]
+		if bool(state.get("mandatory", true)) and not bool(state.get("is_score_objective", false)):
+			return true
+	return false
+
+
+func has_mandatory_score_objective() -> bool:
+	for objective_id in _objectives:
+		var state: Dictionary = _objectives[objective_id]
+		if bool(state.get("mandatory", true)) and bool(state.get("is_score_objective", false)):
+			return true
+	return false
+
+
+func is_bonus_trigger_ready() -> bool:
+	if has_mandatory_non_score_objective():
+		return are_all_mandatory_non_score_objectives_complete()
+	if has_mandatory_score_objective():
+		return are_all_mandatory_objectives_complete()
+	return false
+
+
+func final_evaluate() -> bool:
+	return are_all_mandatory_objectives_complete()
+
+
+func _evaluate_bonus_trigger() -> void:
+	if _bonus_trigger_emitted or not is_bonus_trigger_ready():
+		return
+	_bonus_trigger_emitted = true
+	bonus_trigger_ready.emit()
+
+
+func _emit_final_evaluation_if_changed() -> void:
+	var current_evaluation := final_evaluate()
+	if current_evaluation == _last_final_evaluation:
+		return
+	_last_final_evaluation = current_evaluation
+	final_evaluation_changed.emit(current_evaluation)
