@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/general_series_foundation_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
+[ext_resource type="PackedScene" path="res://components/targets/peg/peg.tscn" id="3_peg"]
+[ext_resource type="PackedScene" path="res://components/targets/straight_block/straight_block.tscn" id="4_block"]
+
+[node name="GeneralSeriesFoundationTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="ScoreController" type="Node" parent="."]
+script = ExtResource("2_score")
+
+[node name="PegA" parent="." instance=ExtResource("3_peg")]
+
+[node name="PegB" parent="." instance=ExtResource("3_peg")]
+
+[node name="BlockA" parent="." instance=ExtResource("4_block")]
+
+[node name="BlockB" parent="." instance=ExtResource("4_block")]
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 900.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 28
+text = "Running general series foundation test..."
