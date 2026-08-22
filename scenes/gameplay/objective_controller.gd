@@ -57,6 +57,14 @@ func add_target_count_objective(
 	add_objective(objective_id, ObjectiveKind.TARGET_COUNT, required_targets, mandatory, false)
 
 
+func add_designated_target_objective(
+	objective_id: StringName,
+	required_targets: int,
+	mandatory: bool = true
+) -> void:
+	add_objective(objective_id, ObjectiveKind.DESIGNATED_TARGETS, required_targets, mandatory, false)
+
+
 func register_target_for_objectives(target: TargetBody) -> void:
 	if target == null or target.is_solid():
 		return
@@ -199,9 +207,11 @@ func _on_target_destroyed(target: TargetBody) -> void:
 
 	for objective_id in _objectives:
 		var state: Dictionary = _objectives[objective_id]
-		if int(state.get("kind", -1)) != ObjectiveKind.TARGET_COUNT:
-			continue
-		increment_objective(objective_id, 1)
+		var kind := int(state.get("kind", -1))
+		if kind == ObjectiveKind.TARGET_COUNT:
+			increment_objective(objective_id, 1)
+		elif kind == ObjectiveKind.DESIGNATED_TARGETS and target.is_objective_target():
+			increment_objective(objective_id, 1)
 
 
 func _evaluate_bonus_trigger() -> void:
