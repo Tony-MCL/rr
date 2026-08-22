@@ -17,6 +17,11 @@ enum TargetShape {
 	PEG,
 }
 
+enum TargetRole {
+	NORMAL,
+	OBJECTIVE,
+}
+
 enum BonusRole {
 	NONE,
 	EXTRA_BALL,
@@ -35,6 +40,7 @@ enum TargetState {
 
 @export_category("Target Identity")
 @export var target_shape: TargetShape = TargetShape.BLOCK
+@export var target_role: TargetRole = TargetRole.NORMAL
 
 @export_category("Bonus Role")
 @export var bonus_role: BonusRole = BonusRole.NONE
@@ -66,8 +72,16 @@ func is_block() -> bool:
 	return target_shape == TargetShape.BLOCK
 
 
+func is_objective_target() -> bool:
+	return is_target() and target_role == TargetRole.OBJECTIVE
+
+
 func get_target_shape() -> TargetShape:
 	return target_shape
+
+
+func get_target_role() -> TargetRole:
+	return target_role
 
 
 func get_bonus_role() -> BonusRole:
