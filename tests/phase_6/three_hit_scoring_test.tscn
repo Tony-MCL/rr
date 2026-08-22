@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://tests/phase_6/three_hit_scoring_test.gd" id="1_test"]
 [ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="2_score"]
 [ext_resource type="Script" path="res://components/targets/target_body.gd" id="3_target"]
+[ext_resource type="Script" path="res://components/zones/zone.gd" id="4_zone"]
 
 [node name="ThreeHitScoringTest" type="Node"]
 script = ExtResource("1_test")
@@ -10,7 +11,8 @@ script = ExtResource("1_test")
 [node name="ScoreController" type="Node" parent="."]
 script = ExtResource("2_score")
 
-[node name="Zone1" type="Zone" parent="."]
+[node name="Zone1" type="Node2D" parent="."]
+script = ExtResource("4_zone")
 zone_id = 1
 
 [node name="Zone1Target" type="StaticBody2D" parent="Zone1"]
@@ -18,7 +20,8 @@ script = ExtResource("3_target")
 hits_required = 3
 removal_delay_seconds = 5.0
 
-[node name="Zone3" type="Zone" parent="."]
+[node name="Zone3" type="Node2D" parent="."]
+script = ExtResource("4_zone")
 zone_id = 3
 
 [node name="Zone3Target" type="StaticBody2D" parent="Zone3"]
