@@ -2,6 +2,7 @@ extends Node
 
 signal score_changed(current_score: int)
 signal skill_shot_awarded(cannonball: RigidBody2D, skill_shot_id: StringName, points: int)
+signal shot_multiplier_changed(shot_id: int, multiplier: int)
 
 const ZONE_VALUES := {
 	1: 10,
@@ -44,6 +45,7 @@ var _current_score: int = 0
 var _construction_series_by_ball: Dictionary = {}
 var _general_series_by_ball: Dictionary = {}
 var _skill_shot_by_ball: Dictionary = {}
+var _shot_multiplier_by_id: Dictionary = {}
 
 
 func get_score() -> int:
@@ -60,6 +62,12 @@ func add_score(points: int) -> void:
 
 	_current_score += points
 	score_changed.emit(_current_score)
+
+
+func add_shot_score(cannonball: RigidBody2D, points: int) -> void:
+	if points <= 0:
+		return
+	add_score(points * get_shot_multiplier(cannonball))
 
 
 func register_target_hit(target: TargetBody, current_hits: int, required_hits: int) -> void:
@@ -79,6 +87,65 @@ func register_target_hit(target: TargetBody, current_hits: int, required_hits: i
 			add_score(zone_value * 10)
 		else:
 			add_score(zone_value)
+
+
+func register_shot_target_hit(
+	target: TargetBody,
+	cannonball: RigidBody2D,
+	current_hits: int,
+	required_hits: int
+) -> void:
+	if target == null or cannonball == null:
+		return
+
+	var zone_value := get_zone_value(target.get_zone_id())
+	if zone_value <= 0:
+		return
+
+	if required_hits == 1 and current_hits == 1:
+		add_shot_score(cannonball, zone_value)
+		return
+
+	if required_hits == 3 and current_hits >= 1 and current_hits <= 3:
+		if current_hits == 3:
+			add_shot_score(cannonball, zone_value * 10)
+		else:
+			add_shot_score(cannonball, zone_value)
+
+
+func register_target_bonus(
+	_target: TargetBody,
+	cannonball: RigidBody2D,
+	bonus_role: TargetBody.BonusRole
+) -> void:
+	if bonus_role != TargetBody.BonusRole.DOUBLE_SCORE:
+		return
+	activate_double_score(cannonball)
+
+
+func activate_double_score(cannonball: RigidBody2D) -> void:
+	var shot_id := _get_shot_id(cannonball)
+	if shot_id < 0:
+		return
+
+	if int(_shot_multiplier_by_id.get(shot_id, 1)) >= 2:
+		return
+
+	_shot_multiplier_by_id[shot_id] = 2
+	shot_multiplier_changed.emit(shot_id, 2)
+
+
+func get_shot_multiplier(cannonball: RigidBody2D) -> int:
+	var shot_id := _get_shot_id(cannonball)
+	if shot_id < 0:
+		return 1
+	return int(_shot_multiplier_by_id.get(shot_id, 1))
+
+
+func _get_shot_id(cannonball: RigidBody2D) -> int:
+	if cannonball == null or not cannonball.has_meta("shot_id"):
+		return -1
+	return int(cannonball.get_meta("shot_id"))
 
 
 func register_construction_hit(cannonball: RigidBody2D, target: TargetBody) -> int:
@@ -274,4 +341,5 @@ func reset_score() -> void:
 	_construction_series_by_ball.clear()
 	_general_series_by_ball.clear()
 	_skill_shot_by_ball.clear()
+	_shot_multiplier_by_id.clear()
 	score_changed.emit(_current_score)
