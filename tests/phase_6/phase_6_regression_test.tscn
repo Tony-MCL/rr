@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/phase_6/phase_6_regression_test.gd" id="1_test"]
+
+[node name="Phase6RegressionTest" type="Node"]
+script = ExtResource("1_test")
+
+[node name="TestHost" type="Node" parent="."]
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 1040.0
+offset_bottom = 900.0
+theme_override_font_sizes/font_size = 26
+text = "Running Phase 6 regression..."
