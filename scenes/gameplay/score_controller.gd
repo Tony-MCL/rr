@@ -28,6 +28,17 @@ func add_score(points: int) -> void:
 	score_changed.emit(_current_score)
 
 
+func register_target_hit(target: TargetBody, current_hits: int, required_hits: int) -> void:
+	if target == null:
+		return
+
+	if required_hits != 1 or current_hits != 1:
+		return
+
+	var zone_value := get_zone_value(target.get_zone_id())
+	add_score(zone_value)
+
+
 func reset_score() -> void:
 	_current_score = 0
 	score_changed.emit(_current_score)
