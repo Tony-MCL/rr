@@ -15,12 +15,36 @@ enum ObjectiveKind {
 var _objectives: Dictionary = {}
 var _bonus_trigger_emitted: bool = false
 var _last_final_evaluation: bool = false
+var _score_controller: Node = null
 
 
 func clear_objectives() -> void:
 	_objectives.clear()
 	_bonus_trigger_emitted = false
 	_last_final_evaluation = false
+
+
+func bind_score_controller(score_controller: Node) -> void:
+	if _score_controller != null and _score_controller.score_changed.is_connected(_on_score_changed):
+		_score_controller.score_changed.disconnect(_on_score_changed)
+
+	_score_controller = score_controller
+	if _score_controller == null:
+		return
+
+	if not _score_controller.score_changed.is_connected(_on_score_changed):
+		_score_controller.score_changed.connect(_on_score_changed)
+	_on_score_changed(int(_score_controller.get_score()))
+
+
+func add_score_objective(
+	objective_id: StringName,
+	required_score: int,
+	mandatory: bool = true
+) -> void:
+	add_objective(objective_id, ObjectiveKind.SCORE, required_score, mandatory, true)
+	if _score_controller != null:
+		set_objective_progress(objective_id, int(_score_controller.get_score()))
 
 
 func add_objective(
@@ -137,6 +161,14 @@ func is_bonus_trigger_ready() -> bool:
 
 func final_evaluate() -> bool:
 	return are_all_mandatory_objectives_complete()
+
+
+func _on_score_changed(current_score: int) -> void:
+	for objective_id in _objectives:
+		var state: Dictionary = _objectives[objective_id]
+		if int(state.get("kind", -1)) != ObjectiveKind.SCORE:
+			continue
+		set_objective_progress(objective_id, current_score)
 
 
 func _evaluate_bonus_trigger() -> void:
