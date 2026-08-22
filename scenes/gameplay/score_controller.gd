@@ -85,6 +85,10 @@ func register_construction_hit(cannonball: RigidBody2D, target: TargetBody) -> i
 	var qualifying_series_count: int = int(state.get("qualifying_series_count", 0))
 	var current_series_qualified: bool = bool(state.get("current_series_qualified", false))
 	var visited_constructions: Array = state.get("visited_constructions", [])
+	var current_series_base_points: int = int(state.get("current_series_base_points", 0))
+	var current_series_multiplier: int = int(
+		state.get("current_series_multiplier", get_construction_chain_multiplier(qualifying_series_count))
+	)
 
 	if previous_construction_id == construction_id:
 		series_length += 1
@@ -94,26 +98,42 @@ func register_construction_hit(cannonball: RigidBody2D, target: TargetBody) -> i
 			visited_constructions = []
 		series_length = 1
 		current_series_qualified = false
+		current_series_base_points = 0
+		current_series_multiplier = get_construction_chain_multiplier(qualifying_series_count)
 		if construction_id not in visited_constructions:
 			visited_constructions.append(construction_id)
+
+	var series_points := get_construction_series_value(series_length)
+	var milestone_bonus := get_construction_milestone_bonus(series_length)
+	var base_points := series_points + milestone_bonus
+	var awarded_multiplier := current_series_multiplier
 
 	if series_length == CONSTRUCTION_QUALIFYING_LENGTH and not current_series_qualified:
 		qualifying_series_count += 1
 		current_series_qualified = true
+		var qualified_multiplier := get_construction_chain_multiplier(qualifying_series_count)
+		if qualified_multiplier > current_series_multiplier:
+			var retroactive_adjustment := current_series_base_points * (
+				qualified_multiplier - current_series_multiplier
+			)
+			add_score(retroactive_adjustment)
+		current_series_multiplier = qualified_multiplier
+		awarded_multiplier = qualified_multiplier
 
-	var multiplier := get_construction_chain_multiplier(qualifying_series_count)
+	current_series_base_points += base_points
+
 	_construction_series_by_ball[ball_key] = {
 		"construction_id": construction_id,
 		"series_length": series_length,
 		"qualifying_series_count": qualifying_series_count,
 		"current_series_qualified": current_series_qualified,
 		"visited_constructions": visited_constructions,
+		"current_series_base_points": current_series_base_points,
+		"current_series_multiplier": current_series_multiplier,
 	}
 
-	var series_points := get_construction_series_value(series_length)
-	var milestone_bonus := get_construction_milestone_bonus(series_length)
-	add_score((series_points + milestone_bonus) * multiplier)
-	return series_points * multiplier
+	add_score(base_points * awarded_multiplier)
+	return series_points * awarded_multiplier
 
 
 func get_construction_series_value(series_length: int) -> int:
