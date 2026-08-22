@@ -17,6 +17,8 @@ var _bonus_trigger_emitted: bool = false
 var _last_final_evaluation: bool = false
 var _score_controller: Node = null
 var _counted_destroyed_targets: Dictionary = {}
+var _registered_clear_all_targets: Dictionary = {}
+var _destroyed_clear_all_targets: Dictionary = {}
 
 
 func clear_objectives() -> void:
@@ -24,6 +26,8 @@ func clear_objectives() -> void:
 	_bonus_trigger_emitted = false
 	_last_final_evaluation = false
 	_counted_destroyed_targets.clear()
+	_registered_clear_all_targets.clear()
+	_destroyed_clear_all_targets.clear()
 
 
 func bind_score_controller(score_controller: Node) -> void:
@@ -65,9 +69,30 @@ func add_designated_target_objective(
 	add_objective(objective_id, ObjectiveKind.DESIGNATED_TARGETS, required_targets, mandatory, false)
 
 
+func add_clear_all_objective(
+	objective_id: StringName,
+	mandatory: bool = true
+) -> void:
+	if objective_id == &"":
+		return
+	_objectives[objective_id] = {
+		"kind": ObjectiveKind.CLEAR_ALL,
+		"required_value": _registered_clear_all_targets.size(),
+		"current_value": _destroyed_clear_all_targets.size(),
+		"mandatory": mandatory,
+		"is_score_objective": false,
+	}
+	_emit_final_evaluation_if_changed()
+
+
 func register_target_for_objectives(target: TargetBody) -> void:
 	if target == null or target.is_solid():
 		return
+
+	var target_key := target.get_instance_id()
+	_registered_clear_all_targets[target_key] = true
+	_sync_clear_all_objectives()
+
 	if not target.hit_requirement_reached.is_connected(_on_target_destroyed):
 		target.hit_requirement_reached.connect(_on_target_destroyed)
 
@@ -133,7 +158,10 @@ func get_objective_required_value(objective_id: StringName) -> int:
 func is_objective_complete(objective_id: StringName) -> bool:
 	if not _objectives.has(objective_id):
 		return false
-	return get_objective_current_value(objective_id) >= get_objective_required_value(objective_id)
+	var required_value := get_objective_required_value(objective_id)
+	if required_value <= 0:
+		return false
+	return get_objective_current_value(objective_id) >= required_value
 
 
 func are_all_mandatory_objectives_complete() -> bool:
@@ -201,6 +229,10 @@ func _on_target_destroyed(target: TargetBody) -> void:
 		return
 
 	var target_key := target.get_instance_id()
+	if _registered_clear_all_targets.has(target_key):
+		_destroyed_clear_all_targets[target_key] = true
+		_sync_clear_all_objectives()
+
 	if _counted_destroyed_targets.has(target_key):
 		return
 	_counted_destroyed_targets[target_key] = true
@@ -212,6 +244,26 @@ func _on_target_destroyed(target: TargetBody) -> void:
 			increment_objective(objective_id, 1)
 		elif kind == ObjectiveKind.DESIGNATED_TARGETS and target.is_objective_target():
 			increment_objective(objective_id, 1)
+
+
+func _sync_clear_all_objectives() -> void:
+	var required_value := _registered_clear_all_targets.size()
+	var current_value := _destroyed_clear_all_targets.size()
+
+	for objective_id in _objectives:
+		var state: Dictionary = _objectives[objective_id]
+		if int(state.get("kind", -1)) != ObjectiveKind.CLEAR_ALL:
+			continue
+
+		var changed := int(state.get("required_value", 0)) != required_value or int(state.get("current_value", 0)) != current_value
+		state["required_value"] = required_value
+		state["current_value"] = current_value
+		_objectives[objective_id] = state
+		if changed:
+			objective_progress_changed.emit(objective_id, current_value, required_value)
+
+	_evaluate_bonus_trigger()
+	_emit_final_evaluation_if_changed()
 
 
 func _evaluate_bonus_trigger() -> void:
