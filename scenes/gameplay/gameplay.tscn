@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" path="res://components/cannon/cannon.tscn" id="1_cannon"]
 [ext_resource type="PackedScene" path="res://components/balls/bottom_exit/bottom_exit.tscn" id="2_bottom_exit"]
@@ -9,6 +9,7 @@
 [ext_resource type="Resource" path="res://data/level_catalog.tres" id="7_level_catalog"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="8_gameplay"]
 [ext_resource type="Script" path="res://scenes/gameplay/score_controller.gd" id="9_score_controller"]
+[ext_resource type="Script" path="res://scenes/gameplay/objective_controller.gd" id="10_objective_controller"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left"]
 size = Vector2(40, 1920)
@@ -36,6 +37,9 @@ starting_ammunition = 5
 
 [node name="ScoreController" type="Node" parent="."]
 script = ExtResource("9_score_controller")
+
+[node name="ObjectiveController" type="Node" parent="."]
+script = ExtResource("10_objective_controller")
 
 [node name="Playfield" type="Node2D" parent="."]
 
@@ -68,3 +72,4 @@ position = Vector2(540, 80)
 [connection signal="ball_caught" from="Playfield/BallCatcher" to="BallManager" method="register_ball_caught"]
 [connection signal="ball_exited" from="Playfield/BottomExit" to="BallManager" method="register_ball_exit"]
 [connection signal="shot_completed" from="BallManager" to="ScoreController" method="end_double_score_for_shot"]
+[connection signal="bonus_trigger_ready" from="ObjectiveController" to="ScoreController" method="end_double_score_for_bonus_trigger"]
