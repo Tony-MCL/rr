@@ -141,6 +141,21 @@ func get_shot_multiplier(cannonball: RigidBody2D) -> int:
 	return int(_shot_multiplier_by_id.get(shot_id, 1))
 
 
+func end_double_score_for_shot(shot_id: int) -> void:
+	if shot_id < 0 or not _shot_multiplier_by_id.has(shot_id):
+		return
+	_shot_multiplier_by_id.erase(shot_id)
+	shot_multiplier_changed.emit(shot_id, 1)
+
+
+func end_double_score_for_bonus_trigger() -> void:
+	var active_shot_ids: Array = _shot_multiplier_by_id.keys()
+	_shot_multiplier_by_id.clear()
+	for shot_id_variant in active_shot_ids:
+		var shot_id := int(shot_id_variant)
+		shot_multiplier_changed.emit(shot_id, 1)
+
+
 func _get_shot_id(cannonball: RigidBody2D) -> int:
 	if cannonball == null or not cannonball.has_meta("shot_id"):
 		return -1
