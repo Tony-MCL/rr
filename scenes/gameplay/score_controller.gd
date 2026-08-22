@@ -17,6 +17,11 @@ const CONSTRUCTION_SERIES_VALUES := {
 	5: 80,
 }
 const CONSTRUCTION_SERIES_REPEAT_VALUE: int = 100
+const CONSTRUCTION_MILESTONE_BONUSES := {
+	10: 500,
+	15: 1000,
+	20: 3000,
+}
 
 var _current_score: int = 0
 var _construction_series_by_ball: Dictionary = {}
@@ -82,7 +87,8 @@ func register_construction_hit(cannonball: RigidBody2D, target: TargetBody) -> i
 	}
 
 	var series_points := get_construction_series_value(series_length)
-	add_score(series_points)
+	var milestone_bonus := get_construction_milestone_bonus(series_length)
+	add_score(series_points + milestone_bonus)
 	return series_points
 
 
@@ -92,6 +98,10 @@ func get_construction_series_value(series_length: int) -> int:
 	if series_length >= 6:
 		return CONSTRUCTION_SERIES_REPEAT_VALUE
 	return int(CONSTRUCTION_SERIES_VALUES.get(series_length, 0))
+
+
+func get_construction_milestone_bonus(series_length: int) -> int:
+	return int(CONSTRUCTION_MILESTONE_BONUSES.get(series_length, 0))
 
 
 func get_construction_series_length(cannonball: RigidBody2D) -> int:
